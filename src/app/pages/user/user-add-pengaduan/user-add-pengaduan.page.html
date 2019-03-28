@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tambah Pengaduan</ion-title>
+    <ion-button slot="end" (click)="submit()" color="success">
+      Kirim
+      <div class="spacer" style="margin-left: 5px;"></div>
+      <ion-icon name="send"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item no-padding class="animated fadeInUp">
+    <ion-label>Kategori</ion-label>
+    <ion-select placeholder="Select One" (ionChange)="onChange($event)">
+      <ion-select-option *ngFor="let kat of kategori" value="{{kat.id}}">{{ kat.kategori_name }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item no-padding class="animated fadeInUp">
+    <ion-label>Sub Kategori</ion-label>
+    <ion-select placeholder="Select One" [(ngModel)]="pengaduan.sub_kategori">
+      <ion-select-option *ngFor="let sub of subkategori" value="{{sub.id}}">{{ sub.subkategori_name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="stacked">Topik</ion-label>
+    <ion-textarea [(ngModel)]="pengaduan.topik"></ion-textarea>
+  </ion-item>
+
+  <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="stacked">Uraian</ion-label>
+    <ion-textarea [(ngModel)]="pengaduan.uraian"></ion-textarea>
+  </ion-item>
+
+  <ion-row no-padding hidden>
+    <ion-col no-padding>
+      <ion-item no-padding class="animated fadeInUp">
+        <ion-label>Lat : </ion-label>
+        <ion-input [(ngModel)]="lat" readonly></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col no-padding>
+      <ion-item no-padding class="animated fadeInUp">
+        <ion-label>Lng : </ion-label>
+        <ion-input [(ngModel)]="lng" readonly></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-item no-padding class="animated fadeInUp" hidden>
+    <ion-label position="stacked">Alamat</ion-label>
+    <ion-textarea readonly [(ngModel)]="pengaduan.address" value="{{ address }}"></ion-textarea>
+  </ion-item>
+  <ion-item no-padding>
+    <ion-icon name="pin" size="large" color="danger"></ion-icon>
+    <p>{{ address }}</p>
+  </ion-item>
+
+  <ion-searchbar style="z-index: 99;" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"
+    placeholder="Search for a place" name="autocomplete"></ion-searchbar>
+  <ion-list [hidden]="autocompleteItems.length == 0">
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
+
+  <div #map id="map" class="map" style="height: 70%; margin-top: -50px;">Cannot Load Map</div>
+
+  <ion-item>
+    <ion-label>Rahasiakan Identitas</ion-label>
+    <ion-toggle [(ngModel)]="pengaduan.hide_identity" (ngModelChange)="hide_id()"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Rahasiakan Pengaduan</ion-label>
+    <ion-toggle [(ngModel)]="pengaduan.hide_report" (ionChange)="hide_rp()"></ion-toggle>
+  </ion-item>
+</ion-content>

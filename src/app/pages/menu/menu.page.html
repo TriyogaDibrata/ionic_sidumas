@@ -1,0 +1,51 @@
+<ion-split-pane>
+
+  <ion-menu contentId="content">
+    <ion-header>
+      <ion-toolbar color="dark" class="user-profile" no-padding>
+        <ion-menu-toggle>
+          <ion-item margin-bottom margin-top lines="none" *ngIf="user != undefined" (click)="goToEditProgile()">
+            <ion-avatar slot="start" *ngIf="user.avatar == null" class="user-avatar">
+              <img src="assets/img/logo-laras.png">
+            </ion-avatar>
+            <ion-avatar slot="start" *ngIf="user.avatar != null" class="user-avatar">
+              <img [src]="user.avatar">
+            </ion-avatar>
+            <ion-label>
+              <ion-text color="light" *ngIf="user.name">
+                <h1><strong>{{ user.name }}</strong></h1>
+              </ion-text>
+              <ion-text color="light" *ngIf="user.email">
+                <h3>
+                  {{ user.email }}
+                </h3>
+              </ion-text>
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of pages">
+          <ion-item [routerLink]="[p.page]">
+            <ion-icon slot="start" [name]="p.icon" [color]="p.color"></ion-icon>
+            <ion-label>
+              {{p.title}}
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item (click)="logout()">
+            Logout
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="content" main></ion-router-outlet>
+
+</ion-split-pane>
