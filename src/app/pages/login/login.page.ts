@@ -17,14 +17,9 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 })
 export class LoginPage implements OnInit {
 
-  user = {
-    name: 'admin',
-    pw: 'admin'
-  }
-
   public onLoginForm: FormGroup;
 
-  FB_APP_ID: number = 2313081672269290;
+  FB_APP_ID: number = 299977957296137;
 
   constructor(public navCtrl: NavController,
     public menuCtrl: MenuController,
@@ -38,7 +33,7 @@ export class LoginPage implements OnInit {
     private envService: EnvService,
     private alertService: AlertService,
     private fb: Facebook,
-    private google: GooglePlus,
+    private googlePlus: GooglePlus,
   ) { }
 
   ngOnInit() {
@@ -138,58 +133,34 @@ export class LoginPage implements OnInit {
     this.navCtrl.navigateRoot('/register');
   }
 
-  async googleLogin(sm_type) {
-    const loading = await this.loadingCtrl.create({
-      message: 'Please wait...'
-    });
+  // async googleLogin(){
+  //   const loading = await this.loadingCtrl.create({
+  //     message: 'Please wait...'
+  //   });
+  //   this.presentLoading(loading);
+  //   this.googlePlus.login({
+  //     'scopes': '', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+  //     'webClientId': "401245627689-4ceut94d75nmslud8un0lafphp6mm6ph.apps.googleusercontent.com", // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+  //     'offline': true, // Optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
+  //     })
+  //     .then(user => {
+  //       console.log(user);
+  //     })
+  // }
 
-    this.presentLoading(loading);
-
-    this.google.login({})
+  googleLogin() {
+    this.googlePlus.login({
+      'webClientId' : '233891482843-8loh9klg8ginehhhrpch7i0pi47q21ci.apps.googleusercontent.com'
+    })
       .then(res => {
-        this.alertService.presentAlert('info', res.displayName);
-
-        // this.authService.socialMediaLogin(res.displayName, res.email, sm_type, user.id, user.picture)
-        //   .subscribe(data => {
-        //     console.log(data['success']);
-        //     if (data['success']) {
-        //       this.alertService.presentToast('Login Success');
-        //       this.navCtrl.navigateRoot('menu');
-        //       loading.dismiss();
-        //     }
-        //   }, err => {
-        //     console.error(err);
-        //     this.alertService.presentAlert('Login Failed', 'Please Check Your Credentials');
-        //     loading.dismiss();
-        //   });
-        // loading.dismiss();
-
-        // this.getUserData();
-        // console.log(res);
-
-        // this.storage.set('user', {
-        //   name : res.displayName,
-        //   email: res.email,
-        //   avatar: res.imageUrl,
-        //   token: res.accessToken
-        // })
-        // .then(() => {
-        //   this.alertService.presentToast('Login Success');
-        //   this.navCtrl.navigateRoot('/home-results');
-        // }, error => {
-        //   console.log(error);
-        //   loading.dismiss();
-        // })
-        // loading.dismiss();
-      })
-      .catch(err => {
-        console.error(err)
-        loading.dismiss();
+        console.log(res);
       });
-  }
+    }
+     
+  
 
 
-  async fbLogin(sm_type) {
+  async fbLogin() {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait...'
     });
@@ -208,8 +179,7 @@ export class LoginPage implements OnInit {
           .then(user => {
             // return console.log(user.email);
             user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
-            loading.dismiss();
-            this.presentAlert(user.email);
+            let sm_type = 'facebook';
 
             this.authService.socialMediaLogin(user.name, user.email, sm_type, user.id, user.picture)
               .subscribe(data => {
@@ -230,7 +200,7 @@ export class LoginPage implements OnInit {
             this.alertService.presentToast('Failed to access facebook');
           })
       }, error => {
-        console.log(error);
+        console.log(error.message);
         loading.dismiss();
       });
   }

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class EnvService {
-  API_URL = 'http://laras.badungkab.go.id/api/';
+  API_URL = 'http://localhost:8000/api/';
   
   constructor() { }
 }

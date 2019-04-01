@@ -30,7 +30,7 @@ export class UserDetailPengaduanPage implements OnInit {
   private http: HttpClient,
   private authService: AuthService,
   private storage: Storage,
-  private loadingCtrl: LoadingController,) { }
+  private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
     this.id_pengaduan = this.route.snapshot.paramMap.get('id'); 

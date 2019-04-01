@@ -14,6 +14,8 @@ const routes: Routes = [
     children: [
       { path: 'admin-home', loadChildren: '../admin/admin-home/admin-home.module#AdminHomePageModule' },
       { path: 'admin-profile', loadChildren: '../admin/admin-profile/admin-profile.module#AdminProfilePageModule' },
+      { path: 'admin-detail-pengaduan/:id', loadChildren: '../admin/admin-detail-pengaduan/admin-detail-pengaduan.module#AdminDetailPengaduanPageModule' },
+      { path: 'admin-project-pengaduan', loadChildren: '../admin/admin-project-pengaduan/admin-project-pengaduan.module#AdminProjectPengaduanPageModule' },
       //userpage
       { path: 'user-home', loadChildren: '../user/user-home/user-home.module#UserHomePageModule' },
       { path: 'user-profile', loadChildren: '../user/user-profile/user-profile.module#UserProfilePageModule' },

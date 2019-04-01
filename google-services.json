@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "982593559720",
+    "firebase_url": "https://siudmas.firebaseio.com",
+    "project_id": "siudmas",
+    "storage_bucket": "siudmas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982593559720:android:e27b8f23ac1372cb",
+        "android_client_info": {
+          "package_name": "com.sidumas.badungkab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982593559720-991jpv9a06ag9evdngg5dp02nekp6heh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sidumas.badungkab",
+            "certificate_hash": "7cd36f4af42395c4c37cf4721f0772c1a93aabd2"
+          }
+        },
+        {
+          "client_id": "982593559720-jc5mdanf8ro7m2mso9u36g9te9vjvq7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAklG1rkApJSTD-5INHqm_gjZcW29Oc-Vc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982593559720-jc5mdanf8ro7m2mso9u36g9te9vjvq7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

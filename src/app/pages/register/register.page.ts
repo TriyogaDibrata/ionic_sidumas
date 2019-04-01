@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { EnvService } from 'src/app/providers/env/env.service';
 import { AlertService } from 'src/app/providers/alert/alert.service';
 import { AuthService } from 'src/app/providers/auth/auth.service';
+import { Facebook } from '@ionic-native/facebook/ngx';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,8 @@ import { AuthService } from 'src/app/providers/auth/auth.service';
 })
 export class RegisterPage implements OnInit {
   public onRegisterForm: FormGroup;
+
+  FB_APP_ID: number = 299977957296137;
 
   constructor(
     public navCtrl: NavController,
@@ -25,6 +28,7 @@ export class RegisterPage implements OnInit {
     private storage: Storage,
     private alertService: AlertService,
     private authService: AuthService,
+    private fb: Facebook,
   ) { }
 
   ionViewWillEnter() {
@@ -87,6 +91,51 @@ export class RegisterPage implements OnInit {
 
       }
     );
+  }
+
+  async fbLogin() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...'
+    });
+    this.presentLoading(loading);
+    // let permissions = new Array<string>();
+
+    //the permissions your facebook app needs from the user
+    const permissions = ["public_profile", "email"];
+
+    this.fb.login(permissions)
+      .then(response => {
+        let userId = response.authResponse.userID;
+
+        //Getting name and gender properties
+        this.fb.api("/me?fields=name,email", permissions)
+          .then(user => {
+            // return console.log(user.email);
+            user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
+            let sm_type = 'facebook';
+
+            this.authService.socialMediaLogin(user.name, user.email, sm_type, user.id, user.picture)
+              .subscribe(data => {
+                console.log(data['success']);
+                if (data['success']) {
+                  this.alertService.presentToast('Login Success');
+                  this.navCtrl.navigateRoot('menu');
+                  loading.dismiss();
+                }
+              }, err => {
+                console.error(err);
+                this.alertService.presentAlert('Login Failed', 'Please Check Your Credentials');
+                loading.dismiss();
+              });
+
+          }).catch(err => {
+            console.log(err);
+            this.alertService.presentToast('Failed to access facebook');
+          })
+      }, error => {
+        console.log(error.message);
+        loading.dismiss();
+      });
   }
 
 

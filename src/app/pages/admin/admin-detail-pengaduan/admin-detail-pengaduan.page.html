@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detail Pengaduan</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="pengaduan">
+    <h1>{{pengaduan.topik}}</h1>
+    <div class="user_thumbnail">
+      <ion-avatar item-left>
+        <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
+        <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
+      </ion-avatar>
+      <div class="user_name">
+        <h3>{{pengaduan.pelapor}}</h3>
+        <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label>
+      </div>
+    </div>
+
+
+    <div class="address">
+      <ion-icon name="pin" color="danger"></ion-icon> {{pengaduan.alamat}}
+    </div>
+
+    <ion-item no-padding lines="none" margin-top="20px">
+      <ion-label text-wrap>{{pengaduan.uraian}}</ion-label>
+    </ion-item>
+    <!--Lampiran Gambar-->
+    <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
+      <ion-slide *ngFor="let file of files">
+        <img [src]="file.fullpath">
+      </ion-slide>
+    </ion-slides>
+
+    <ion-item-divider margin-top="20px" color="primary">
+      <ion-label>
+        Tindak Lanjut
+      </ion-label>
+    </ion-item-divider>
+    <ion-row>
+      <ion-col>
+        <ion-item no-padding>
+          <ion-textarea placeholder="Tuliskan Tindak Lanjut...." clearOnEdit="true"></ion-textarea>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="full">
+          <ion-icon name="chatboxes"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-text *ngIf="!tindaklanjut">
+      Belum Ada Tindak Lanjut
+    </ion-text>
+    <ion-card *ngFor="let tl of tindaklanjut">
+      <ion-card-header>
+        <ion-card-title>{{tl.currentuser.name}}</ion-card-title>
+        <ion-card-subtitle>{{tl.tanggal}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        {{tl.tanggapan}}
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

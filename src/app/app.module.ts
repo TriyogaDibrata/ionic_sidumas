@@ -17,9 +17,12 @@ import { Facebook } from '@ionic-native/facebook/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { GoogleMaps } from '@ionic-native/google-maps/ngx';
 
+//components
+import { NotificationsComponent } from './components/notifications/notifications.component';
+
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, NotificationsComponent],
+  entryComponents: [NotificationsComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

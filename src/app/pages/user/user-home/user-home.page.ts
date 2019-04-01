@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/providers/auth/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/providers/alert/alert.service';
 
-
 @Component({
   selector: 'app-user-home',
   templateUrl: './user-home.page.html',
@@ -22,6 +21,8 @@ export class UserHomePage implements OnInit {
   user : any;
   pengaduan: any;
   token: any;
+  
+  showSearchBar: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -41,6 +42,11 @@ export class UserHomePage implements OnInit {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.getPengaduan();
+  }
+
+  public showSearch() {
+
+    this.showSearchBar = !this.showSearchBar;
   }
 
   getPengaduan(){
