@@ -8,6 +8,7 @@ import { AlertService } from 'src/app/providers/alert/alert.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { GoogleMaps } from '@ionic-native/google-maps/ngx';
 import { AuthService } from 'src/app/providers/auth/auth.service';
+import { Router } from '@angular/router';
 
 declare var google;
 
@@ -48,7 +49,8 @@ export class UserAddPengaduanPage implements OnInit {
                public googleMaps: GoogleMaps,
                private loadingCtrl: LoadingController,
                public zone: NgZone,
-               private authService: AuthService,) { 
+               private authService: AuthService,
+               private router: Router) { 
 
               this.geocoder = new google.maps.Geocoder;
               let elem = document.createElement("div")
@@ -224,6 +226,8 @@ export class UserAddPengaduanPage implements OnInit {
   submit(){
     // console.log(this.hide_identity, this.hide_report);
     let headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'applicatiobn/json',
       'Authorization': 'Bearer '+ this.user.user.api_token
     });
 
@@ -246,7 +250,7 @@ export class UserAddPengaduanPage implements OnInit {
       console.log(data);
       if(data['success']){
         this.alert.presentAlert('Success', 'Pengaduan Berhasil Disimpan');
-        this.navCtrl.navigateRoot('/menu/user-home');
+        this.router.navigate(['/menu/user-upload-file', data['data']['id']]);
       }
     }, err => {
       console.log(err);

@@ -22,6 +22,7 @@ const routes: Routes = [
       { path: 'user-detail-pengaduan/:id', loadChildren: '../user/user-detail-pengaduan/user-detail-pengaduan.module#UserDetailPengaduanPageModule' },
       { path: 'user-add-pengaduan', loadChildren: '../user/user-add-pengaduan/user-add-pengaduan.module#UserAddPengaduanPageModule' },
       { path: 'user-pengaduan-saya', loadChildren: '../user/user-pengaduan-saya/user-pengaduan-saya.module#UserPengaduanSayaPageModule' },
+      { path: 'user-upload-file/:id', loadChildren: '../user/user-upload-file/user-upload-file.module#UserUploadFilePageModule' },
     ]
   }
 ];

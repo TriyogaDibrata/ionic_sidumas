@@ -41,7 +41,7 @@ export class MenuPage implements OnInit {
     if (this.authService.isAdmin()) {
       this.pages = [
         {title: 'Pengaduan Baru', page: '/menu/admin-home', icon: 'home'},
-        {title: 'Project Pengaduan', page: '/menu/admin-project-pengaduan', icon: ''},
+        {title: 'Project Pengaduan', page: '/menu/admin-project-pengaduan', icon: 'planet'},
         {title: 'Profile', page: '/menu/admin-profile', icon: 'person'}
       ];
       this.navCtrl.navigateRoot('/menu/admin-home');
