@@ -250,7 +250,8 @@ export class UserAddPengaduanPage implements OnInit {
       console.log(data);
       if(data['success']){
         this.alert.presentAlert('Success', 'Pengaduan Berhasil Disimpan');
-        this.router.navigate(['/menu/user-upload-file', data['data']['id']]);
+        // this.navCtrl.navigateRoot(['/menu/user-upload-file', data['data']['id']]);
+        this.navCtrl.navigateRoot('/menu/user-home');
       }
     }, err => {
       console.log(err);

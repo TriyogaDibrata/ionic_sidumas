@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title>
+    <ion-title (click)="toTop()">
       <ion-text color="light">
         <ion-text color="light" class="fw700">Beranda</ion-text>
       </ion-text>
@@ -21,8 +21,8 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="dark" *ngIf="showSearchBar">
-      <ion-searchbar [(ngModel)]="searchKey" animated></ion-searchbar>
-    </ion-toolbar>
+    <ion-searchbar [(ngModel)]="searchKey" animated></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content no-padding>
@@ -32,40 +32,72 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let item of pengaduan">
-    <ion-card-header>
-      <ion-card-subtitle>{{item.kategori_name}} - {{item.subkategori_name}}</ion-card-subtitle>
-      <ion-card-title>{{item.topik}}</ion-card-title>
-    </ion-card-header>
+  <ion-list>
+    <ion-card *ngFor="let item of pengaduan">
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-text>
+            {{item.kategori_name}} - {{item.subkategori_name}}
+          </ion-text>
+          <ion-text class="ion-float-right">
+              {{ item.status_pengaduan }}
+          <ion-icon name="checkmark-circle" *ngIf="item.status <= 1"></ion-icon>
+          <ion-icon name="checkmark-circle" *ngIf="item.status > 1" color="primary"></ion-icon>
+          </ion-text>
+        </ion-card-subtitle>
+        <ion-card-title>{{item.topik}}</ion-card-title>
+      </ion-card-header>
 
-    <ion-card-content>
-      <div class="user_thumbnail">
-        <ion-avatar item-left>
-          <img *ngIf="item.avatar != null" [src]="item.avatar">
-          <img *ngIf="item.avatar == null" src="assets/img/user.png">
-        </ion-avatar>
-        <div class="user_name">
-          <h2>{{item.pelapor}}</h2>
-          <ion-label>{{ converTime(item.tanggal) }}</ion-label>
+      <ion-card-content>
+        <div class="user_thumbnail">
+          <ion-avatar item-left>
+            <img *ngIf="item.avatar != null" [src]="item.avatar">
+            <img *ngIf="item.avatar == null" src="assets/img/user.png">
+          </ion-avatar>
+          <div class="user_name">
+            <h2>{{item.pelapor}}</h2>
+            <ion-label>{{ converTime(item.tanggal) }}</ion-label>
+          </div>
         </div>
-      </div>
 
-      <div class="uraian">
-        <ion-row>
-          <ion-col>
-            <p>{{ (item.uraian).substring(0, 200) }} ... <a (click)="goToDetail(item.id)">detail</a></p>
-          </ion-col>
-          <ion-col size="4" *ngIf="item.file">
-            <img [src]="item.file.fullpath">
-          </ion-col>
-        </ion-row>
-      </div>
+        <div class="uraian">
+          <ion-row>
+            <ion-col>
+              <p>{{ (item.uraian).substring(0, 200) }} ... <a (click)="goToDetail(item.id)">detail</a></p>
+            </ion-col>
+            <ion-col size="4" *ngIf="item.file">
+              <img [src]="item.file.fullpath">
+            </ion-col>
+          </ion-row>
+        </div>
 
-      <ion-label>
-        <ion-icon name="pin" color="danger"></ion-icon>{{item.alamat}}
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
+        <ion-label>
+          <ion-icon name="pin" color="danger"></ion-icon>{{item.alamat}}
+        </ion-label>
+      </ion-card-content>
+      <ion-row padding>
+        <ion-col (click)="goToDetail(item.id)">
+          <ion-icon name="chatboxes"></ion-icon>
+          {{ item.count_comments }}
+          Komentar
+        </ion-col>
+        <ion-col (click)="addVote(item.id)">
+          <ion-icon name="thumbs-up"></ion-icon>
+          {{ item.count_likes}}
+          Dukungan
+        </ion-col>
+        <ion-col class="ion-text-right">
+          <ion-icon name="share"></ion-icon>
+          Share
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
   <div *ngIf="!pengaduan">
     <ion-list>

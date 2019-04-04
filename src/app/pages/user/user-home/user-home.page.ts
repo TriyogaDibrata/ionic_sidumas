@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
 import { NotificationsComponent } from '../../../components/notifications/notifications.component'
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { AuthService } from 'src/app/providers/auth/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/providers/alert/alert.service';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-user-home',
@@ -15,13 +16,19 @@ import { AlertService } from 'src/app/providers/alert/alert.service';
   styleUrls: ['./user-home.page.scss'],
 })
 export class UserHomePage implements OnInit {
+
+  @ViewChild(IonContent) content: IonContent;
+
   searchKey = '';
   yourLocation = '123 Test Street';
   themeCover = 'assets/img/ionic4-Start-Theme-cover.jpg';
-  user : any;
+  user: any;
   pengaduan: any;
   token: any;
-  
+
+  limit = 5;
+  offset = 0;
+
   showSearchBar: boolean = false;
 
   constructor(
@@ -36,35 +43,61 @@ export class UserHomePage implements OnInit {
     private env: EnvService,
     private authService: AuthService,
     private router: Router,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+  }
+
+  ionViewWillEnter() {
     this.getPengaduan();
+    this.menuCtrl.enable(true);
   }
 
   public showSearch() {
-
     this.showSearchBar = !this.showSearchBar;
   }
 
-  getPengaduan(){
+  loadData(event) {
+    setTimeout(() => {
+      console.log('Done');
+      event.target.complete();
+
+      // App logic to determine if all data is loaded
+      // and disable the infinite scroll
+      if (this.pengaduan.length == 1000) {
+        event.target.disabled = true;
+      }
+    }, 500);
+  }
+
+  getPengaduan(infiniteScroll?) {
     this.storage.get('user')
-    .then(user => {
-      console.log(user.user.api_token);
-      this.user = user.user;
-      let headers = new HttpHeaders({
-        'Authorization': 'Bearer '+ this.user.api_token,
-        'Accept': 'application/json'
-      });
-  
-      this.http.get(this.env.API_URL+ 'pengaduan/list', {headers: headers})
-      .subscribe(data =>{
-        console.log(data['data']);
-        return this.pengaduan = data['data'];
+      .then(user => {
+        this.user = user.user;
+        let headers = new HttpHeaders({
+          'Authorization': 'Bearer ' + this.user.api_token,
+          'Accept': 'application/json'
+        });
+
+        this.http.get(this.env.API_URL + 'pengaduan/list?limit=' + this.limit, { headers: headers })
+          .subscribe(data => {
+            console.log(data['data']);
+            this.pengaduan = data['data'];
+            if (infiniteScroll) {
+              infiniteScroll.target.complete();
+            }
+          })
       })
-    })
+  }
+
+  loadMore(infiniteScroll) {
+    this.limit = this.pengaduan.length + 5;
+    this.getPengaduan(infiniteScroll);
+
+    if (this.limit === this.pengaduan.length) {
+      infiniteScroll.enable(false);
+    }
   }
 
   doRefresh(event) {
@@ -72,12 +105,8 @@ export class UserHomePage implements OnInit {
     event.target.complete();
   }
 
-  goToDetail(id){
-    this.router.navigate(['/menu/user-detail-pengaduan', id]);
-  }
-
-  ionViewWillEnter(){
-  this.menuCtrl.enable(true);
+  goToDetail(id) {
+    this.navCtrl.navigateForward(['/menu/user-detail-pengaduan', id]);
   }
 
   converTime(time) {
@@ -98,6 +127,35 @@ export class UserHomePage implements OnInit {
       showBackdrop: true
     });
     return await popover.present();
+  }
+
+  toTop() {
+    this.content.scrollToTop(1500);
+  }
+
+  addVote(pengaduan_id) {
+    let headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'applicatiobn/json',
+      'Authorization': 'Bearer ' + this.user.api_token
+    });
+
+    let data = {
+      'user_id': this.user.id,
+      'pengaduan_id': pengaduan_id,
+    };
+
+    this.http.post(this.env.API_URL + 'pengaduan/add-vote', data, { headers: headers })
+      .subscribe(data => {
+        if (data['success']) {
+          this.alert.presentToast(data['message']);
+          this.ionViewWillEnter();
+        } else {
+          this.alert.presentToast(data['message']);
+        }
+      }, err => {
+        console.log(err);
+      });
   }
 
 }

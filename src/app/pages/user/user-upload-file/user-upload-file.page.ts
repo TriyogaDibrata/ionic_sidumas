@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/Camera/ngx';
-import { ActionSheetController, ToastController, Platform, LoadingController } from '@ionic/angular';
+import { ActionSheetController, ToastController, Platform, LoadingController, AlertController } from '@ionic/angular';
 import { File, FileEntry } from '@ionic-native/File/ngx';
 import { HttpClient } from '@angular/common/http';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
@@ -19,8 +19,10 @@ const STORAGE_KEY = 'my_images';
 })
 export class UserUploadFilePage implements OnInit {
 
-  images = [];
-  id_pengaduan : any;
+  id_pengaduan: any;
+
+  public photos: any;
+  public base64Image: string;
 
   constructor(private camera: Camera,
     private file: File,
@@ -35,69 +37,53 @@ export class UserUploadFilePage implements OnInit {
     private filePath: FilePath,
     private platform: Platform,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private alertCtrl: AlertController) { }
 
   ngOnInit() {
-      this.id_pengaduan = this.route.snapshot.paramMap.get('id'); 
-      console.log(this.id_pengaduan);
-    this.plt.ready().then(() => {
-      this.loadStoredImages();
-    })
+    this.id_pengaduan = this.route.snapshot.paramMap.get('id');
+    console.log(this.id_pengaduan);
+    this.photos = [];
   }
 
-
-  loadStoredImages() {
-    this.storage.get(STORAGE_KEY).then(images => {
-      if (images) {
-        let arr = JSON.parse(images);
-        this.images = [];
-        for (let img of arr) {
-          let filePath = this.file.dataDirectory + img;
-          let resPath = this.pathForImage(filePath);
-          this.images.push({ name: img, path: resPath, filePath: filePath });
+  async deletePhoto(index) {
+    const confirm = await this.alertCtrl.create({
+      header: 'Sure you want to delete this photo? There is NO undo!',
+      message: '',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        }, {
+          text: 'Yes',
+          handler: () => {
+            console.log('Agree clicked');
+            this.photos.splice(index, 1);
+          }
         }
-      }
+      ]
     });
+    await confirm.present();
   }
 
-  pathForImage(img) {
-    if (img === null) {
-      return '';
-    } else {
-      let converted = this.webview.convertFileSrc(img);
-      return converted;
-    }
-  }
-
-  async presentToast(text) {
-    const toast = await this.toastController.create({
-      message: text,
-      position: 'bottom',
-      duration: 3000
-    });
-    toast.present();
-  }
-
-  async selectImage() {
-    const actionSheetController = document.querySelector('ion-action-sheet-controller');
-    await actionSheetController.componentOnReady();
-
-    const actionSheet = await actionSheetController.create({
-      header: "Albums",
+  async selectPhoto() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Upload Gambar',
       buttons: [{
-        text: 'Load From Gallery',
-        icon: 'share',
+        text: 'Pilih Dari Gallery',
+        icon: 'photos',
         handler: () => {
-          this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          this.takePhoto(this.camera.PictureSourceType.PHOTOLIBRARY);
         }
-      }, 
-      {
-        text: 'Play (open modal)',
-        icon: 'arrow-dropright-circle',
+      }, {
+        text: 'Ambil Gamber',
+        icon: 'camera',
         handler: () => {
-          this.takePicture(this.camera.PictureSourceType.CAMERA);
+          this.takePhoto(this.camera.PictureSourceType.CAMERA);
         }
-      }, 
+      },
       {
         text: 'Cancel',
         icon: 'close',
@@ -110,132 +96,25 @@ export class UserUploadFilePage implements OnInit {
     await actionSheet.present();
   }
 
-  takePicture(sourceType: PictureSourceType) {
-    var options: CameraOptions = {
-      quality: 100,
+  takePhoto(sourceType) {
+    const options: CameraOptions = {
+      quality: 100, // picture quality
+      targetHeight: 600,
+      targetWidth: 600,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      allowEdit: true,
       sourceType: sourceType,
-      saveToPhotoAlbum: false,
-      correctOrientation: true
-    };
-
-    this.camera.getPicture(options).then(imagePath => {
-      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-        this.filePath.resolveNativePath(imagePath)
-          .then(filePath => {
-            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-            this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-          });
-      } else {
-        var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-        var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-        this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-      }
-    });
-
-  }
-
-
-  createFileName() {
-    var d = new Date(),
-      n = d.getTime(),
-      newFileName = n + ".jpg";
-    return newFileName;
-  }
-
-  copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-      this.updateStoredImages(newFileName);
-    }, error => {
-      this.presentToast('Error while storing file.');
+    }
+    this.camera.getPicture(options).then((imageData) => {
+      this.base64Image = "data:image/jpeg;base64," + imageData;
+      this.photos.push(this.base64Image);
+      this.photos.reverse();
+    }, (err) => {
+      console.log(err);
     });
   }
-
-  updateStoredImages(name) {
-    this.storage.get(STORAGE_KEY).then(images => {
-      let arr = JSON.parse(images);
-      if (!arr) {
-        let newImages = [name];
-        this.storage.set(STORAGE_KEY, JSON.stringify(newImages));
-      } else {
-        arr.push(name);
-        this.storage.set(STORAGE_KEY, JSON.stringify(arr));
-      }
-
-      let filePath = this.file.dataDirectory + name;
-      let resPath = this.pathForImage(filePath);
-
-      let newEntry = {
-        name: name,
-        path: resPath,
-        filePath: filePath
-      };
-
-      this.images = [newEntry, ...this.images];
-      this.ref.detectChanges(); // trigger change detection cycle
-    });
-  }
-
-  deleteImage(imgEntry, position) {
-    this.images.splice(position, 1);
-
-    this.storage.get(STORAGE_KEY).then(images => {
-      let arr = JSON.parse(images);
-      let filtered = arr.filter(name => name != imgEntry.name);
-      this.storage.set(STORAGE_KEY, JSON.stringify(filtered));
-
-      var correctPath = imgEntry.filePath.substr(0, imgEntry.filePath.lastIndexOf('/') + 1);
-
-      this.file.removeFile(correctPath, imgEntry.name).then(res => {
-        this.presentToast('File removed.');
-      });
-    });
-  }
-
-  startUpload(imgEntry) {
-    this.file.resolveLocalFilesystemUrl(imgEntry.filePath)
-      .then(entry => {
-        (<FileEntry>entry).file(file => this.readFile(file))
-      })
-      .catch(err => {
-        this.presentToast('Error while reading file.');
-      });
-  }
-
-  readFile(file: any) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const formData = new FormData();
-      const imgBlob = new Blob([reader.result], {
-        type: file.type
-      });
-      formData.append('file', imgBlob, file.name);
-      this.uploadImageData(formData);
-    };
-    reader.readAsArrayBuffer(file);
-  }
-
-  async uploadImageData(formData: FormData) {
-    const loading = await this.loadingController.create({
-      message: 'Uploading image...',
-    });
-    await loading.present();
-
-    this.http.post("http://localhost:8888/upload.php", formData)
-      .pipe(
-        finalize(() => {
-          loading.dismiss();
-        })
-      )
-      .subscribe(res => {
-        if (res['success']) {
-          this.presentToast('File upload complete.')
-        } else {
-          this.presentToast('File upload failed.')
-        }
-      });
-  }
-
 
 
 }

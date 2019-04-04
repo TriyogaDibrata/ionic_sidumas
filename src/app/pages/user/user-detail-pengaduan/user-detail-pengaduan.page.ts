@@ -22,7 +22,10 @@ export class UserDetailPengaduanPage implements OnInit {
   pengaduan: any;
   files: any;
   tindaklanjut: any;
+  comments: any;
   state: any;
+
+  komentar: any;
 
   constructor(private alert: AlertService,
   private route: ActivatedRoute,
@@ -34,12 +37,11 @@ export class UserDetailPengaduanPage implements OnInit {
 
   ngOnInit() {
     this.id_pengaduan = this.route.snapshot.paramMap.get('id'); 
-    this.getDetail();
   }
 
 
   ionViewWillEnter(){
-
+    this.getDetail();
   }
 
   async getDetail(){
@@ -63,6 +65,7 @@ export class UserDetailPengaduanPage implements OnInit {
         this.user = data['data']['has_user'][0];
         this.files = data['data']['files'];
         this.tindaklanjut = data['data']['tanggapans'];
+        this.comments = data['data']['comments'];
         loading.dismiss();
       })
 
@@ -77,6 +80,35 @@ export class UserDetailPengaduanPage implements OnInit {
 
   async presentLoading(loading){
     return await loading.present();
+  }
+
+  addKomentar(){
+    // console.log(this.id_pengaduan, this.token.user.id, this.token.user.api_token);
+    let headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'applicatiobn/json',
+      'Authorization': 'Bearer '+ this.token.user.api_token
+    });
+
+    let data = {
+      'user_id' : this.token.user.id,
+      'pengaduan_id': this.id_pengaduan,
+      'komentar': this.komentar
+    };
+
+    this.http.post(this.env.API_URL+ 'pengaduan/add-komentar', data, {headers: headers})
+    .subscribe(data => {
+      console.log(data);
+      if(data['success']){
+        this.alert.presentToast(data['message']);
+        this.komentar = "";
+        this.ionViewWillEnter();
+      } else {
+        this.alert.presentToast(data['message']);
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
 }

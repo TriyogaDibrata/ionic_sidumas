@@ -11,15 +11,15 @@
   <div *ngIf="pengaduan">
     <h1>{{pengaduan.topik}}</h1>
     <div class="user_thumbnail">
-        <ion-avatar item-left>
-          <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
-          <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
-        </ion-avatar>
-        <div class="user_name">
-          <h3>{{pengaduan.pelapor}}</h3>
-          <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label>
-        </div>
+      <ion-avatar item-left>
+        <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
+        <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
+      </ion-avatar>
+      <div class="user_name">
+        <h3>{{pengaduan.pelapor}}</h3>
+        <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label>
       </div>
+    </div>
 
 
     <div class="address">
@@ -63,14 +63,25 @@
     <ion-row>
       <ion-col>
         <ion-item no-padding>
-          <ion-textarea placeholder="Tuliskan komentar...." clearOnEdit="true"></ion-textarea>
+          <ion-textarea placeholder="Tuliskan komentar...." clearOnEdit="true" [(ngModel)]="komentar"></ion-textarea>
         </ion-item>
       </ion-col>
       <ion-col size="2">
-        <ion-button expand="full">
+        <ion-button expand="full" (click)="addKomentar()">
           <ion-icon name="chatboxes"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
+
+    <ion-card *ngFor="let comment of comments">
+      <ion-card-header>
+        <ion-card-title *ngIf="comment.currentuser.name">{{comment.currentuser.name}}</ion-card-title>
+        <ion-card-subtitle>{{comment.created_at}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        {{comment.komentar}}
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
