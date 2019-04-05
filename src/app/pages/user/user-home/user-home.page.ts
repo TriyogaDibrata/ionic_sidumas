@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/providers/auth/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/providers/alert/alert.service';
 import { IonContent } from '@ionic/angular';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-user-home',
@@ -43,7 +44,8 @@ export class UserHomePage implements OnInit {
     private env: EnvService,
     private authService: AuthService,
     private router: Router,
-    private alert: AlertService
+    private alert: AlertService,
+    private socialSharing: SocialSharing
   ) { }
 
   ngOnInit() {
@@ -101,8 +103,20 @@ export class UserHomePage implements OnInit {
   }
 
   doRefresh(event) {
-    this.getPengaduan();
-    event.target.complete();
+    let headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.user.api_token,
+      'Accept': 'application/json'
+    });
+
+    this.http.get(this.env.API_URL + 'pengaduan/list?limit=' + this.limit, { headers: headers })
+      .subscribe(data => {
+        console.log(data['data']);
+        this.pengaduan = data['data'];
+        event.target.complete();
+      }, err => {
+        console.log(err);
+        event.target.complete();
+      })
   }
 
   goToDetail(id) {
@@ -134,6 +148,7 @@ export class UserHomePage implements OnInit {
   }
 
   addVote(pengaduan_id) {
+    console.log(this.user.id, pengaduan_id);
     let headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'applicatiobn/json',
@@ -156,6 +171,14 @@ export class UserHomePage implements OnInit {
       }, err => {
         console.log(err);
       });
+  }
+
+  share(id, topik, file) {
+    this.socialSharing.share("Sistem Pengaduan Masyarakat Kabupaten Badung", topik, file, "sidumas.badungkab.go.id/pengaduan/get/"+id).then(() => {
+      console.log("shareSheetShare: Success");
+    }).catch(() => {
+      console.error("shareSheetShare: failed");
+    });
   }
 
 }

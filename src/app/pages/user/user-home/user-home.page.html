@@ -76,19 +76,24 @@
         </ion-label>
       </ion-card-content>
       <ion-row padding>
+        <ion-col size="6">
+          <ion-icon name="swap"></ion-icon>
+          {{ item.tanggapans.length }}
+          Tindak Lanjut
+        </ion-col>
         <ion-col (click)="goToDetail(item.id)">
           <ion-icon name="chatboxes"></ion-icon>
-          {{ item.count_comments }}
-          Komentar
+          {{ item.comments.length }}
+          <!-- Komentar -->
         </ion-col>
         <ion-col (click)="addVote(item.id)">
           <ion-icon name="thumbs-up"></ion-icon>
-          {{ item.count_likes}}
-          Dukungan
+          {{ item.likes.length}}
+          <!-- Dukungan -->
         </ion-col>
-        <ion-col class="ion-text-right">
+        <ion-col class="ion-text-right" (click)="share(item.id, item.topik, item.file.fullpath)">
           <ion-icon name="share"></ion-icon>
-          Share
+          <!-- Share -->
         </ion-col>
       </ion-row>
     </ion-card>
