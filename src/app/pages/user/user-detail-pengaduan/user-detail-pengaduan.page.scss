@@ -9,7 +9,24 @@
     display : flex;
     .user_name{
         margin-left: 10px;
-        margin-top: -15px;
+        margin-top: 5px;
+        h2{
+        color: #000000;
+        }
+    }
+}
+
+.comment_thumbnail{
+    display : flex;
+    ion-avatar{
+        width: 45px;
+        height: 45px;
+    }
+    .user_name{
+        margin-left: 10px;
+        h2{
+        color: #000000;
+        }
     }
 }
 

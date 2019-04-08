@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="theme">
     <ion-buttons slot="start">
       <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
@@ -16,11 +16,11 @@
     <ion-buttons slot="end">
       <ion-button size="small" shape="round" color="warning" (click)="notifications()">
         <ion-icon name="notifications"></ion-icon>
-        <ion-badge color="dark" slot="end">2</ion-badge>
+        <ion-badge color="primary" slot="end">2</ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="dark" *ngIf="showSearchBar">
+  <ion-toolbar color="theme" *ngIf="showSearchBar">
     <ion-searchbar [(ngModel)]="searchKey" animated></ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -76,7 +76,7 @@
         </ion-label>
       </ion-card-content>
       <ion-row padding>
-        <ion-col size="6">
+        <ion-col size="6" (click)="goToDetail(item.id)">
           <ion-icon name="swap"></ion-icon>
           {{ item.tanggapans.length }}
           Tindak Lanjut
@@ -91,7 +91,7 @@
           {{ item.likes.length}}
           <!-- Dukungan -->
         </ion-col>
-        <ion-col class="ion-text-right" (click)="share(item.id, item.topik, item.file.fullpath)">
+        <ion-col class="ion-text-right" (click)="share(item.id, item.topik)">
           <ion-icon name="share"></ion-icon>
           <!-- Share -->
         </ion-col>
@@ -277,87 +277,11 @@
           </p>
         </ion-label>
       </ion-item>
-      <ion-list-header>
-        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-list-header>
-        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-list-header>
-        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-list-header>
-        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </p>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
     </ion-list>
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="danger" routerLink="/menu/user-add-pengaduan">
+    <ion-fab-button color="dark" routerLink="/menu/user-add-pengaduan">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

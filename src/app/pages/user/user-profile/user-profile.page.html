@@ -1,16 +1,17 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="theme">
     <ion-buttons slot="start">
       <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Edit Profile</ion-title>
+    <ion-title color="light">Edit Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="profile">
   <ion-card no-margin>
     <ion-card-content color="danger">
-      <img src="assets/img/avatar.jpeg">
+      <img *ngIf="user.avatar" [src]="user.avatar">
+      <img *ngIf="!user.avatar" src="assets/img/user.png">
       <ion-button class="btn-avatar" color="dark" size="small">
         <ion-icon slot="icon-only" name="camera" size="small"></ion-icon>
       </ion-button>

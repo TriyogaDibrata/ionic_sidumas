@@ -1,14 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/Camera/ngx';
-import { ActionSheetController, ToastController, Platform, LoadingController, AlertController } from '@ionic/angular';
+import { ActionSheetController, ToastController, Platform, LoadingController, AlertController, NavController } from '@ionic/angular';
 import { File, FileEntry } from '@ionic-native/File/ngx';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Storage } from '@ionic/storage';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { finalize } from 'rxjs/operators';
+import { prepareSyntheticListenerFunctionName } from '@angular/compiler/src/render3/util';
+import { AlertService } from 'src/app/providers/alert/alert.service';
+import { EnvService } from 'src/app/providers/env/env.service';
 
 const STORAGE_KEY = 'my_images';
 
@@ -20,6 +23,7 @@ const STORAGE_KEY = 'my_images';
 export class UserUploadFilePage implements OnInit {
 
   id_pengaduan: any;
+  user: any;
 
   public photos: any;
   public base64Image: string;
@@ -38,12 +42,24 @@ export class UserUploadFilePage implements OnInit {
     private platform: Platform,
     private router: Router,
     private route: ActivatedRoute,
-    private alertCtrl: AlertController) { }
+    private alertCtrl: AlertController,
+    private alert: AlertService,
+    private envService: EnvService,
+    private navCtrl: NavController) { }
 
   ngOnInit() {
     this.id_pengaduan = this.route.snapshot.paramMap.get('id');
     console.log(this.id_pengaduan);
+    this.getUser();
     this.photos = [];
+  }
+
+  getUser() {
+    this.storage.get('user')
+      .then(user => {
+        console.log(user['user']);
+        this.user = user['user'];
+      })
   }
 
   async deletePhoto(index) {
@@ -116,5 +132,31 @@ export class UserUploadFilePage implements OnInit {
     });
   }
 
+  uploadImages() {
+    let headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + this.user.api_token,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    let data = {
+      'pengaduan_id': this.id_pengaduan,
+      'files': this.photos
+    }
+
+    this.http.post(this.envService.API_URL + 'pengaduan/upload-files', data, { headers: headers })
+      .subscribe(data => {
+        console.log(JSON.stringify(data));
+        this.alert.presentToast("Lampiran Berhasil Disimpan");
+        this.navCtrl.navigateRoot('/menu/user-home');
+      }, err => {
+        console.log(err);
+        this.alert.presentAlert('Gagal', "Lampiran gagal disimpan!");
+      });
+  }
+
+  toHome() {
+    this.navCtrl.navigateRoot('/menu/user-home');
+  }
 
 }

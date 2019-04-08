@@ -1,26 +1,42 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title>
-      Ionic Image Upload
+    <ion-title class="text-align-center">
+      Tambah Lampiran
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button size="small" shape="round" color="light" (click)="toHome()">
+        <ion-label>Lewati</ion-label>
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let photo of photos; let id = index">
+        <ion-card class="block">
+          <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>
+          <img [src]="photo" *ngIf="photo" />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
-<ion-grid>
+<ion-footer>
   <ion-row>
-    <ion-col size="6" *ngFor="let photo of photos; let id = index">
-      <ion-card class="block">
-        <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>
-        <img [src]="photo" *ngIf="photo" />
-      </ion-card>
+    <ion-col>
+      <ion-button expand="full" (click)="selectPhoto()">
+        <ion-icon name="camera"></ion-icon>&nbsp;Pilih Gamabar
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="full" (click)="uploadImages()">
+        <ion-icon name="cloud-upload"></ion-icon>&nbsp;Upload
+      </ion-button>
     </ion-col>
   </ion-row>
-</ion-grid>
-<ion-footer>
-  <ion-button expand="full" (click)="selectPhoto()">
-    <ion-icon name="camera"></ion-icon>&nbsp;Pilih Gamabar
-  </ion-button>
 </ion-footer>

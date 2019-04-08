@@ -21,6 +21,7 @@ import { File } from '@ionic-native/File/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 //components
 import { NotificationsComponent } from './components/notifications/notifications.component';
@@ -50,7 +51,8 @@ import { NotificationsComponent } from './components/notifications/notifications
     File,
     WebView,
     FilePath,
-    SocialSharing
+    SocialSharing,
+    CallNumber
   ],
   bootstrap: [AppComponent]
 })

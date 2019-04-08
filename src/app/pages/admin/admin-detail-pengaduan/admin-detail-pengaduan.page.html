@@ -1,71 +1,168 @@
 <ion-header>
-  <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Detail Pengaduan</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-  <div *ngIf="pengaduan">
-    <h1>{{pengaduan.topik}}</h1>
-    <div class="user_thumbnail">
-      <ion-avatar item-left>
-        <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
-        <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
-      </ion-avatar>
-      <div class="user_name">
-        <h3>{{pengaduan.pelapor}}</h3>
-        <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label>
-      </div>
-    </div>
-
-
-    <div class="address">
-      <ion-icon name="pin" color="danger"></ion-icon> {{pengaduan.alamat}}
-    </div>
-
-    <ion-item no-padding lines="none" margin-top="20px">
-      <ion-label text-wrap>{{pengaduan.uraian}}</ion-label>
-    </ion-item>
-    <!--Lampiran Gambar-->
-    <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
-      <ion-slide *ngFor="let file of files">
-        <img [src]="file.fullpath">
-      </ion-slide>
-    </ion-slides>
-
-    <ion-item-divider margin-top="20px" color="primary">
-      <ion-label>
-        Tindak Lanjut
-      </ion-label>
-    </ion-item-divider>
-    <ion-row>
-      <ion-col>
-        <ion-item no-padding>
-          <ion-textarea placeholder="Tuliskan Tindak Lanjut...." clearOnEdit="true"></ion-textarea>
-        </ion-item>
-      </ion-col>
-      <ion-col size="2">
-        <ion-button expand="full">
-          <ion-icon name="chatboxes"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-text *ngIf="!tindaklanjut">
-      Belum Ada Tindak Lanjut
-    </ion-text>
-    <ion-card *ngFor="let tl of tindaklanjut">
+    <ion-toolbar color="theme">
+      <ion-buttons slot="start">
+        <ion-back-button color="light"></ion-back-button>
+      </ion-buttons>
+      <ion-title color="light">Detail Pengaduan</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-card>
       <ion-card-header>
-        <ion-card-title>{{tl.currentuser.name}}</ion-card-title>
-        <ion-card-subtitle>{{tl.tanggal}}</ion-card-subtitle>
+        <ion-card-subtitle>
+          <ion-text>
+            {{pengaduan.kategori_name }} - {{pengaduan.subkategori_name}}
+          </ion-text>
+          <ion-text class="ion-float-right">
+            {{ pengaduan.status_pengaduan }}
+            <ion-icon name="checkmark-circle" *ngIf="pengaduan.status <= 1"></ion-icon>
+            <ion-icon name="checkmark-circle" *ngIf="pengaduan.status > 1" color="primary"></ion-icon>
+          </ion-text>
+        </ion-card-subtitle>
       </ion-card-header>
-
+  
       <ion-card-content>
-        {{tl.tanggapan}}
+        <div class="user_thumbnail">
+          <ion-avatar item-left>
+            <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
+            <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
+          </ion-avatar>
+          <div class="user_name">
+            <h2>{{pengaduan.pelapor}}</h2>
+            <!-- <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label> -->
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label style="margin-left: 5px;">{{ pengaduan.tanggal }}</ion-label>
+          </div>
+        </div>
+        <ion-card-title class="ion-text-center">{{ pengaduan.topik }}</ion-card-title>
+        <ion-text>{{ pengaduan.uraian }}</ion-text>
+        <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
+          <ion-slide *ngFor="let file of files">
+            <img [src]="file.fullpath">
+          </ion-slide>
+        </ion-slides>
+        <ion-card-subtitle>
+          <div class="ion-text-start">
+            Sumber :
+            <ion-icon name="browsers" *ngIf="pengaduan.sumber_id == 1"></ion-icon>
+            <ion-icon name="phone-portrait" *ngIf="pengaduan.sumber_id == 2"></ion-icon>
+            <ion-icon name="planet" *ngIf="pengaduan.sumber_id == 3"></ion-icon>
+            {{ pengaduan.sumber }}
+          </div>
+        </ion-card-subtitle>
+        <ion-card-subtitle>
+          <div class="ion-text-start">
+            Lokasi Pengaduan :
+            <ion-icon name="pin" color="danger"></ion-icon>
+            {{ pengaduan.alamat }}
+          </div>
+        </ion-card-subtitle>
       </ion-card-content>
     </ion-card>
-  </div>
-</ion-content>
+  
+    <!--map-->
+    <div #map id="map" style="height: 30%; margin: 10px;">Cannot Load Map</div>
+  
+    <!--bar-->
+    <ion-card>
+      <ion-row padding>
+        <ion-col size="6" (click)="showTl()">
+          <ion-icon name="swap"></ion-icon>
+          {{ pengaduan.tanggapans.length }}
+          Tindak Lanjut
+        </ion-col>
+        <ion-col (click)="showComments()">
+          <ion-icon name="chatboxes"></ion-icon>
+          {{ pengaduan.comments.length }}
+          <!-- Komentar -->
+        </ion-col>
+        <ion-col (click)="addVote(pengaduan.id)">
+          <ion-icon name="thumbs-up"></ion-icon>
+          {{ pengaduan.likes.length}}
+          <!-- Dukungan -->
+        </ion-col>
+        <ion-col class="ion-text-right" (click)="share(pengaduan.id, pengaduan.topik)">
+          <ion-icon name="share"></ion-icon>
+          <!-- Share -->
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  
+    <!--Tindak Lanjut-->
+    <div style="margin: 10px;" *ngIf="tindaklanjut_body">
+      <ion-item-divider color="dark">
+        <ion-text>Tindak Lanjut {{pengaduan.tanggapans.length}}</ion-text>
+      </ion-item-divider>
+      <div *ngIf="tanggapans">
+        <ion-list *ngFor="let tanggapan of tanggapans">
+          <ion-card>
+            <ion-card-content>
+              <div class="comment_thumbnail">
+                <ion-avatar item-left>
+                  <img *ngIf="tanggapan.user_avatar != null" [src]="tanggapan.user_avatar">
+                  <img *ngIf="tanggapan.user_avatar  == null" src="assets/img/user.png">
+                </ion-avatar>
+                <div class="user_name">
+                  <h2>{{tanggapan.user_name}}</h2>
+                  <!-- <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label> -->
+                  <ion-icon name="calendar"></ion-icon>
+                  <ion-label style="margin-left: 5px;">{{ tanggapan.created_at }}</ion-label>
+                </div>
+              </div>
+            </ion-card-content>
+            <ion-card-content>
+              <ion-text>
+                {{tanggapan.tanggapan}}
+              </ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+      </div>
+    </div>
+  
+    <!--Komentar-->
+    <div style="margin: 10px;" *ngIf="komentar_body">
+      <ion-item-divider color="dark">
+        <ion-text>Komentar {{pengaduan.comments.length}}</ion-text>
+      </ion-item-divider>
+      <ion-row>
+        <ion-col>
+          <ion-item no-padding>
+            <ion-textarea placeholder="Tuliskan komentar...." clearOnEdit="true" [(ngModel)]="komentar"></ion-textarea>
+          </ion-item>
+        </ion-col>
+        <ion-col size="2">
+          <ion-button expand="full" (click)="addKomentar()">
+            <ion-icon name="chatboxes"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="comments">
+        <ion-list *ngFor="let comment of comments">
+          <ion-card>
+            <ion-card-content>
+              <div class="comment_thumbnail">
+                <ion-avatar item-left>
+                  <img *ngIf="comment.user_avatar != null" [src]="comment.user_avatar">
+                  <img *ngIf="comment.user_avatar  == null" src="assets/img/user.png">
+                </ion-avatar>
+                <div class="user_name">
+                  <h2>{{comment.user_name}}</h2>
+                  <!-- <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label> -->
+                  <ion-icon name="calendar"></ion-icon>
+                  <ion-label style="margin-left: 5px;">{{ comment.created_at }}</ion-label>
+                </div>
+              </div>
+            </ion-card-content>
+            <ion-card-content>
+              <ion-text>
+                {{comment.komentar}}
+              </ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+      </div>
+    </div>
+  
+  </ion-content>

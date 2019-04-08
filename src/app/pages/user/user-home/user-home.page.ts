@@ -173,8 +173,8 @@ export class UserHomePage implements OnInit {
       });
   }
 
-  share(id, topik, file) {
-    this.socialSharing.share("Sistem Pengaduan Masyarakat Kabupaten Badung", topik, file, "sidumas.badungkab.go.id/pengaduan/get/"+id).then(() => {
+  share(id, topik) {
+    this.socialSharing.share("Sistem Pengaduan Masyarakat Kabupaten Badung", topik, null, "sidumas.badungkab.go.id/pengaduan/get/"+id).then(() => {
       console.log("shareSheetShare: Success");
     }).catch(() => {
       console.error("shareSheetShare: failed");

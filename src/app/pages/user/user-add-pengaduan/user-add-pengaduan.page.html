@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="theme">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Tambah Pengaduan</ion-title>
-    <ion-button slot="end" (click)="submit()" color="success">
-      Kirim
+    <ion-title color="light">Tambah Pengaduan</ion-title>
+    <ion-button slot="end" (click)="submit()" size="small" shape="round" color="primary">
+      Simpan
       <div class="spacer" style="margin-left: 5px;"></div>
       <ion-icon name="send"></ion-icon>
     </ion-button>
@@ -74,11 +74,11 @@
 
   <ion-item>
     <ion-label>Rahasiakan Identitas</ion-label>
-    <ion-toggle [(ngModel)]="pengaduan.hide_identity" (ngModelChange)="hide_id()"></ion-toggle>
+    <ion-toggle [(ngModel)]="hide_identity" (ngModelChange)="hide_id()"></ion-toggle>
   </ion-item>
 
   <ion-item>
     <ion-label>Rahasiakan Pengaduan</ion-label>
-    <ion-toggle [(ngModel)]="pengaduan.hide_report" (ionChange)="hide_rp()"></ion-toggle>
+    <ion-toggle [(ngModel)]="hide_report" (ionChange)="hide_rp()"></ion-toggle>
   </ion-item>
 </ion-content>
