@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterContentInit } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { AlertService } from 'src/app/providers/alert/alert.service';
 import { EnvService } from 'src/app/providers/env/env.service';
@@ -45,7 +45,8 @@ export class AdminDetailPengaduanPage implements OnInit {
   private authService: AuthService,
   private storage: Storage,
   private loadingCtrl: LoadingController,
-  private socialSharing: SocialSharing) { }
+  private socialSharing: SocialSharing,
+  private navCtrl: NavController) { }
 
   ngOnInit() {
     this.id_pengaduan = this.route.snapshot.paramMap.get('id'); 
@@ -82,7 +83,6 @@ export class AdminDetailPengaduanPage implements OnInit {
       .subscribe( data => {
         console.log(data['data']);
         this.pengaduan = data['data'];
-        this.user = data['data']['has_user'][0];
         this.files = data['data']['files'];
         this.initMap();
         loading.dismiss();
@@ -211,6 +211,10 @@ export class AdminDetailPengaduanPage implements OnInit {
     }).catch(() => {
       console.error("shareSheetShare: failed");
     });
+  }
+
+  toTindakLanjut(id) {
+    this.navCtrl.navigateForward(['/menu/admin-tindak-lanjut', id]);
   }
 
 }

@@ -108,7 +108,7 @@ export class AdminHomePage implements OnInit {
       'Accept': 'application/json'
     });
 
-    this.http.get(this.env.API_URL + 'pengaduan/list?limit=' + this.limit, { headers: headers })
+    this.http.get(this.env.API_URL + 'pengaduan/listopd?opd_id='+this.user.opd_id+'&limit=' + this.limit, { headers: headers })
       .subscribe(data => {
         console.log(data['data']);
         this.pengaduan = data['data'];
@@ -117,10 +117,10 @@ export class AdminHomePage implements OnInit {
         console.log(err);
         event.target.complete();
       })
-  }
+  } 
 
   goToDetail(id) {
-    this.navCtrl.navigateForward(['/menu/user-detail-pengaduan', id]);
+    this.navCtrl.navigateForward(['/menu/admin-detail-pengaduan', id]);
   }
 
   converTime(time) {

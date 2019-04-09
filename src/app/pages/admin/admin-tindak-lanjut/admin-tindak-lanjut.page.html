@@ -1,18 +1,18 @@
 <ion-header>
   <ion-toolbar color="theme">
-    <ion-title color="light">
-      Tambah Lampiran
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button size="small" shape="round" color="light" (click)="toHome()">
-        <ion-label>Lewati</ion-label>
-        <ion-icon name="arrow-dropright"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
+    <ion-title color="light">Tindak Lanjut</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+
+  <ion-item no-padding class="animated fadeInUp">
+    <ion-label position="stacked">Uraian Tindak Lanjut</ion-label>
+    <ion-textarea [(ngModel)]="pengaduan.uraian"></ion-textarea>
+  </ion-item>
 
   <ion-grid>
     <ion-row>
@@ -26,16 +26,17 @@
   </ion-grid>
 
 </ion-content>
+
 <ion-footer>
   <ion-row>
     <ion-col>
-      <ion-button expand="full" (click)="selectPhoto()">
-        <ion-icon name="camera"></ion-icon>&nbsp;Pilih Gamabar
+      <ion-button expand="block" (click)="selectPhoto()" shape="round">
+        Upload Gambar
       </ion-button>
     </ion-col>
     <ion-col>
-      <ion-button expand="full" (click)="uploadImages()">
-        <ion-icon name="cloud-upload"></ion-icon>&nbsp;Upload
+      <ion-button expand="block" shape="round">
+        Simpan
       </ion-button>
     </ion-col>
   </ion-row>

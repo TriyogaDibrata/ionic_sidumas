@@ -82,7 +82,6 @@ export class UserDetailPengaduanPage implements OnInit {
       .subscribe( data => {
         console.log(data['data']);
         this.pengaduan = data['data'];
-        this.user = data['data']['has_user'][0];
         this.files = data['data']['files'];
         this.initMap();
         loading.dismiss();
