@@ -35,8 +35,8 @@
           <ion-label style="margin-left: 5px;">{{ pengaduan.tanggal }}</ion-label>
         </div>
       </div>
-      <ion-card-title class="ion-text-center">{{ pengaduan.topik }}</ion-card-title>
-      <ion-text>{{ pengaduan.uraian }}</ion-text>
+      <ion-card-title class="ion-text-center ion-padding">{{ pengaduan.topik }}</ion-card-title>
+      <ion-text class="ion-text-justify">{{ pengaduan.uraian }}</ion-text>
       <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
         <ion-slide *ngFor="let file of files">
           <img [src]="file.fullpath">
@@ -69,12 +69,12 @@
     <ion-row padding>
       <ion-col size="6" (click)="showTl()">
         <ion-icon name="swap"></ion-icon>
-        {{ pengaduan.tanggapans.length }}
+        {{ tanggapans.length }}
         Tindak Lanjut
       </ion-col>
       <ion-col (click)="showComments()">
         <ion-icon name="chatboxes"></ion-icon>
-        {{ pengaduan.comments.length }}
+        {{ comments.length }}
         <!-- Komentar -->
       </ion-col>
       <ion-col (click)="addVote(pengaduan.id)">
