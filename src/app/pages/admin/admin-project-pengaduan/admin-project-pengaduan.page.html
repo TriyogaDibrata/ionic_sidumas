@@ -25,46 +25,54 @@
     <ion-card>
       <ion-card-content>
         <ion-item no-padding>
-          <ion-title>
-           {{p.nama}}
-          </ion-title>
+          <ion-row>
+            <ion-title>
+              {{p.nama}}
+            </ion-title>
+          </ion-row>
         </ion-item>
-        
-          <ion-row>
-            <ion-col size="6">
-              Jumlah Pengaduan
-            </ion-col>
-            <ion-col size="1">
-              :
-            </ion-col>
-            <ion-col size="5">
-              {{p.jumlah_pengaduan}}
-            </ion-col>
-          </ion-row>
 
-          <ion-row>
-            <ion-col size="6">
-              Tanggal Mulai
-            </ion-col>
-            <ion-col size="1">
-              :
-            </ion-col>
-            <ion-col size="5">
-              {{p.start_date}}
-            </ion-col>
-          </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            Jumlah Pengaduan
+          </ion-col>
+          <ion-col size="1">
+            :
+          </ion-col>
+          <ion-col size="5">
+            {{p.jumlah_pengaduan}}
+          </ion-col>
+        </ion-row>
 
-          <ion-row>
-            <ion-col size="6">
-              Tanggal Berakhir
-            </ion-col>
-            <ion-col size="1">
-              :
-            </ion-col>
-            <ion-col size="5">
-              {{p.end_date}}
-            </ion-col>
-          </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            Tanggal Mulai
+          </ion-col>
+          <ion-col size="1">
+            :
+          </ion-col>
+          <ion-col size="5">
+            {{p.start_date}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="6">
+            Tanggal Berakhir
+          </ion-col>
+          <ion-col size="1">
+            :
+          </ion-col>
+          <ion-col size="5">
+            {{p.end_date}}
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+      <ion-card-content no-padding>
+        <ion-button color="secondary" class="ion-float-right" (click)="detailProject(p.id)">
+          <ion-icon name="eye"></ion-icon>
+          Detail
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </ion-list>

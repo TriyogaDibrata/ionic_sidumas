@@ -112,7 +112,7 @@ export class UserPengaduanSayaPage implements OnInit {
       'Accept': 'application/json'
     });
 
-    this.http.get(this.env.API_URL + 'pengaduan/list?limit=' + this.limit, { headers: headers })
+    this.http.get(this.env.API_URL + 'pengaduan/listsaya?user_id='+this.user.id+'&limit=' + this.limit, { headers: headers })
       .subscribe(data => {
         console.log(data['data']);
         this.pengaduan = data['data'];

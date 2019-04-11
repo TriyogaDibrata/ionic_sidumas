@@ -37,6 +37,11 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
       },
+      { path: 'admin-detail-project/:id', 
+        loadChildren: '../admin/admin-detail-project/admin-detail-project.module#AdminDetailProjectPageModule',
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+      },
       {
         path: 'admin-tindak-lanjut/:id',
         loadChildren: '../admin/admin-tindak-lanjut/admin-tindak-lanjut.module#AdminTindakLanjutPageModule',

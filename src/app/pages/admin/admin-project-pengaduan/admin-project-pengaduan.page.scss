@@ -46,6 +46,11 @@
 // io
 
 ion-card{
-    background: linear-gradient(to left, #e52d27, #b31217);
+    background: linear-gradient(to left, #1488CC, #2B32B2);
+    color: #ffffff;
+    
+    ion-title {
+        color: #ffffff;
+    }
     
 }

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { GoogleMaps } from '@ionic-native/google-maps/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 declare var google;
 
@@ -23,6 +24,7 @@ export class UserDetailPengaduanPage implements OnInit {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   markers: any;
+  my_loc: any;
 
   id_pengaduan: any;
   user: any;
@@ -45,7 +47,8 @@ export class UserDetailPengaduanPage implements OnInit {
   private authService: AuthService,
   private storage: Storage,
   private loadingCtrl: LoadingController,
-  private socialSharing: SocialSharing) { }
+  private socialSharing: SocialSharing,
+  private geoloc: Geolocation) { }
 
   ngOnInit() {
     this.id_pengaduan = this.route.snapshot.paramMap.get('id'); 
@@ -110,6 +113,13 @@ export class UserDetailPengaduanPage implements OnInit {
     })
   }
 
+  myLocation(){
+    this.geoloc.getCurrentPosition()
+    .then((resp) => {
+      this.my_loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
+    })
+  }
+
   async initMap(){
     let latLng = new google.maps.LatLng(this.pengaduan.koordinat_lat, this.pengaduan.koordinat_lng);
 
@@ -125,7 +135,7 @@ export class UserDetailPengaduanPage implements OnInit {
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
     let infowindow = new google.maps.InfoWindow({
-      content: "<a href='https://www.google.com/maps?saddr=My+Location&daddr="+latLng+"' target='_blank'>"+this.pengaduan.alamat+"</a>"
+      content: "<a href='https://www.google.com/maps?saddr="+this.my_loc+"&daddr="+latLng+"' target='_blank'>"+this.pengaduan.alamat+"</a>"
     });
 
     let marker = new google.maps.Marker({
@@ -178,8 +188,7 @@ export class UserDetailPengaduanPage implements OnInit {
     });
   }
 
-  addVote(pengaduan_id) {
-    console.log(this.user.id, pengaduan_id);
+  addVote() {
     let headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'applicatiobn/json',
@@ -188,7 +197,7 @@ export class UserDetailPengaduanPage implements OnInit {
 
     let data = {
       'user_id': this.token.user.id,
-      'pengaduan_id': pengaduan_id,
+      'pengaduan_id': this.id_pengaduan,
     };
 
     this.http.post(this.env.API_URL + 'pengaduan/add-vote', data, { headers: headers })
