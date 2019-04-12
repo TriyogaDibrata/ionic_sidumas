@@ -7,7 +7,6 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Storage } from '@ionic/storage';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { finalize } from 'rxjs/operators';
 import { prepareSyntheticListenerFunctionName } from '@angular/compiler/src/render3/util';
 import { AlertService } from 'src/app/providers/alert/alert.service';
@@ -24,6 +23,7 @@ export class AdminTindakLanjutPage implements OnInit {
 
   id_pengaduan: any;
   user: any;
+  uraian: string;
 
   public photos: any;
   public base64Image: string;
@@ -132,7 +132,7 @@ export class AdminTindakLanjutPage implements OnInit {
     });
   }
 
-  uploadImages() {
+  saveTindakLanjut() {
     let headers = new HttpHeaders({
       'Authorization': 'Bearer ' + this.user.api_token,
       'Content-Type': 'application/json',
@@ -141,14 +141,16 @@ export class AdminTindakLanjutPage implements OnInit {
 
     let data = {
       'pengaduan_id': this.id_pengaduan,
+      'uraian': this.uraian,
+      'user_id': this.user.id,
       'files': this.photos
     }
 
-    this.http.post(this.envService.API_URL + 'pengaduan/upload-files', data, { headers: headers })
+    this.http.post(this.envService.API_URL + 'pengaduan/tindak-lanjut', data, { headers: headers })
       .subscribe(data => {
         console.log(JSON.stringify(data));
-        this.alert.presentToast("Lampiran Berhasil Disimpan");
-        this.navCtrl.navigateRoot('/menu/user-home');
+        this.alert.presentToast("Tindak Lanjut dan Lampiran Berhasil Disimpan");
+        this.navCtrl.navigateRoot('/menu/admin-detail-pengaduan/'+this.id_pengaduan);
       }, err => {
         console.log(err);
         this.alert.presentAlert('Gagal', "Lampiran gagal disimpan!");

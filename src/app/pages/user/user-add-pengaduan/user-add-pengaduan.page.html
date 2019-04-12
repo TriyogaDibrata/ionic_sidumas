@@ -63,8 +63,9 @@
   </ion-item>
 
   <ion-searchbar style="z-index: 99;" [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"
-    placeholder="Search for a place" name="autocomplete"></ion-searchbar>
-  <ion-list [hidden]="autocompleteItems.length == 0">
+    placeholder="Search for a place" name="autocomplete">
+  </ion-searchbar>
+  <ion-list [hidden]="autocompleteItems.length == 0" style="z-index: 99;">
     <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
       {{ item.description }}
     </ion-item>
