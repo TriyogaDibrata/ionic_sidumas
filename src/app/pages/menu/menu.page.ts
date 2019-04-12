@@ -125,6 +125,14 @@ export class MenuPage implements OnInit {
     await alert.present();
   }
 
+  goToEditProfile(tipe){
+   if(tipe == 1){
+     this.navCtrl.navigateRoot('/menu/admin-profile');
+   } else{
+     this.navCtrl.navigateRoot('/menu/user-profile');
+   }
+  }
+
   checkActivePage(page) {
   }
 }

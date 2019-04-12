@@ -114,8 +114,8 @@ export class UserDetailPengaduanPage implements OnInit {
   }
 
   myLocation(){
-    this.geoloc.getCurrentPosition()
-    .then((resp) => {
+    this.geoloc.watchPosition()
+    .subscribe((resp) => {
       this.my_loc = new google.maps.LatLng(resp.coords.latitude, resp.coords.longitude);
     })
   }

@@ -4,7 +4,7 @@
     <ion-header>
       <ion-toolbar color="theme" class="user-profile" no-padding>
         <ion-menu-toggle>
-          <ion-item margin-bottom margin-top lines="none" *ngIf="user != undefined" (click)="goToEditProgile()">
+          <ion-item margin-bottom margin-top lines="none" *ngIf="user != undefined" (click)="goToEditProfile(user.tipe)">
             <ion-avatar slot="start" *ngIf="user.avatar == null" class="user-avatar">
               <img src="assets/img/user.png">
             </ion-avatar>

@@ -12,7 +12,7 @@
     <ion-card-content color="danger">
       <img *ngIf="user.avatar" [src]="user.avatar">
       <img *ngIf="!user.avatar" src="assets/img/user.png">
-      <ion-button class="btn-avatar" color="dark" size="small">
+      <ion-button class="btn-avatar" color="dark" size="small" shape="round">
         <ion-icon slot="icon-only" name="camera" size="small"></ion-icon>
       </ion-button>
       <h1 class="display_name">{{user.name}}</h1>
