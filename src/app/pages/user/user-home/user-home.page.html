@@ -16,7 +16,7 @@
     <ion-buttons slot="end">
       <ion-button size="small" shape="round" color="warning" (click)="notifications()">
         <ion-icon name="notifications"></ion-icon>
-        <ion-badge color="primary" slot="end">2</ion-badge>
+        <ion-badge color="primary" slot="end">{{notif.length}}</ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -104,6 +104,8 @@
       </ion-row>
     </ion-card>
   </ion-list>
+
+  <ion-text class="ion-text-center" *ngIf="reachBottom">You've Reached The Bottom Of The Page</ion-text>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Load more data...">

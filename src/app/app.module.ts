@@ -25,10 +25,11 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 
 //components
 import { NotificationsComponent } from './components/notifications/notifications.component';
+import { PopmenuComponent } from './components/popmenu/popmenu.component';
 
 @NgModule({
-  declarations: [AppComponent, NotificationsComponent],
-  entryComponents: [NotificationsComponent],
+  declarations: [AppComponent, NotificationsComponent, PopmenuComponent],
+  entryComponents: [NotificationsComponent, PopmenuComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 

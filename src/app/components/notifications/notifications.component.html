@@ -1,26 +1,29 @@
-<ion-list no-padding no-margin>
-    <ion-list-header color="dark">
-      <ion-label class="fw700">Notifications</ion-label>
-    </ion-list-header>
+<ion-list no-padding>
+  <ion-list-header color="danger">
+    <ion-label>Notifikasi</ion-label>
+  </ion-list-header>
 
-    <ion-item color="primary" class="text-10">
-      <ion-icon name="mail" color="light"></ion-icon>
-      <ion-label>New Offer 25% OFF</ion-label>
-    </ion-item>
+  <ion-card *ngFor="let notif of notifications" (click)="goToDetail(notif.pengaduan_id)">
+    <ion-chip>
+      <ion-avatar *ngIf="notif.avatar">
+        <img [src]="notif.avatar">
+      </ion-avatar>
+      <ion-avatar *ngIf="!notif.avatar">
+        <img src="assets/img/user.png">
+      </ion-avatar>
+      <ion-label>{{notif.username}}</ion-label>
+    </ion-chip>
+    <div class="notif-content">
+      <ion-text>{{notif.notif_title}}</ion-text>
+      <br />
+      <ion-text class="notif-date">{{ converTime(notif.created_at) }}</ion-text>
+    </div>
+  </ion-card>
 
-    <ion-item color="light" class="text-10">
-      <ion-icon name="mail-open" color="primary"></ion-icon>
-      <ion-label>New Offer 15% OFF by month!</ion-label>
-    </ion-item>
+  <ion-card *ngIf="notifications.length < 1">
+    <ion-card-content>
+      <ion-text class="ion-text-center">Tidak Ada Notifikasi Terbaru</ion-text>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-item color="light" class="text-10">
-      <ion-icon name="mail-open" color="primary"></ion-icon>
-      <ion-label>New Offer 10% OFF by month!</ion-label>
-    </ion-item>
-
-    <ion-item color="primary" class="text-10">
-      <ion-icon name="mail" color="light"></ion-icon>
-      <ion-label>New Offer 35% OFF</ion-label>
-    </ion-item>
-
-  </ion-list>
+</ion-list>

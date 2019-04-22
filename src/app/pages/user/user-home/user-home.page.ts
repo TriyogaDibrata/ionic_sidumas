@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { NotificationsComponent } from '../../../components/notifications/notifications.component'
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { AlertService } from 'src/app/providers/alert/alert.service';
 import { IonContent } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { PopmenuComponent } from '../../../components/popmenu/popmenu.component';
 
 @Component({
   selector: 'app-user-home',
@@ -19,6 +20,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 export class UserHomePage implements OnInit {
 
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   searchKey = '';
   yourLocation = '123 Test Street';
@@ -26,6 +28,8 @@ export class UserHomePage implements OnInit {
   user: any;
   pengaduan: any;
   token: any;
+  notif: any;
+  reachBottom: boolean = false;
 
   limit = 5;
   offset = 0;
@@ -46,31 +50,20 @@ export class UserHomePage implements OnInit {
     private router: Router,
     private alert: AlertService,
     private socialSharing: SocialSharing
-  ) { }
+  ) { 
+  }
 
   ngOnInit() {
+    this.menuCtrl.enable(true);
+    this.getNotif();
   }
 
   ionViewWillEnter() {
     this.getPengaduan();
-    this.menuCtrl.enable(true);
   }
 
   public showSearch() {
     this.showSearchBar = !this.showSearchBar;
-  }
-
-  loadData(event) {
-    setTimeout(() => {
-      console.log('Done');
-      event.target.complete();
-
-      // App logic to determine if all data is loaded
-      // and disable the infinite scroll
-      if (this.pengaduan.length == 1000) {
-        event.target.disabled = true;
-      }
-    }, 500);
   }
 
   getPengaduan(infiniteScroll?) {
@@ -89,6 +82,8 @@ export class UserHomePage implements OnInit {
             if (infiniteScroll) {
               infiniteScroll.target.complete();
             }
+          }, err => {
+            this.alertServie.presentAlert('Message', 'Cant Load Data')
           })
       })
   }
@@ -97,8 +92,10 @@ export class UserHomePage implements OnInit {
     this.limit = this.pengaduan.length + 5;
     this.getPengaduan(infiniteScroll);
 
-    if (this.limit === this.pengaduan.length) {
+    if (this.limit == this.pengaduan.length) {
       infiniteScroll.enable(false);
+      this.infiniteScroll.disabled;
+      this.reachBottom = true;
     }
   }
 
@@ -138,7 +135,8 @@ export class UserHomePage implements OnInit {
       component: NotificationsComponent,
       event: ev,
       animated: true,
-      showBackdrop: true
+      showBackdrop: true,
+      cssClass: 'custom-popover'
     });
     return await popover.present();
   }
@@ -179,6 +177,25 @@ export class UserHomePage implements OnInit {
     }).catch(() => {
       console.error("shareSheetShare: failed");
     });
+  }
+
+  getNotif(){
+    this.storage.get('user')
+    .then(data => {
+      this.user = data['user'];
+
+      let headers = new HttpHeaders({
+        'Accept': 'application/json',
+        'Content-Type': 'applicatiobn/json',
+        'Authorization': 'Bearer ' + this.user.api_token
+      });
+
+      this.http.get(this.env.API_URL + 'pengaduan/notifikasi?user_id='+this.user.id+'&limit=5', {headers: headers})
+      .subscribe(resp => {
+        console.log(resp['data']);
+        this.notif = resp['data'];
+      })
+    })
   }
 
 }

@@ -207,3 +207,8 @@ ion-item {
       margin-bottom: -2px;
     }
   }
+
+  .custom-popover .popover-content {
+    width: 90%;
+    top: 55px !important;
+}

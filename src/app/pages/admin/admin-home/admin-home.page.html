@@ -16,7 +16,7 @@
       <ion-buttons slot="end">
         <ion-button size="small" shape="round" color="warning" (click)="notifications()">
           <ion-icon name="notifications"></ion-icon>
-          <ion-badge color="primary" slot="end">2</ion-badge>
+          <ion-badge color="primary" slot="end">0</ion-badge>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -99,7 +99,7 @@
       </ion-card>
     </ion-list>
   
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll threshold="10%" (ionInfinite)="loadMore($event)">
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>

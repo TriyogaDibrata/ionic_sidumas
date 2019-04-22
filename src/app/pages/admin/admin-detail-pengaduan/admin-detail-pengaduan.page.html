@@ -115,6 +115,11 @@
             <ion-text>
               {{tanggapan.tanggapan}}
             </ion-text>
+            <ion-slides pager="true" [options]="slideOpts" *ngIf="tanggapan.files" margin-top="20px">
+              <ion-slide *ngFor="let file of tanggapan.files">
+                <img [src]="file.fullpath" style="height: 200px; width: auto;">
+              </ion-slide>
+            </ion-slides>
           </ion-card-content>
         </ion-card>
       </ion-list>
@@ -167,19 +172,8 @@
 
 </ion-content>
 
-<!-- <ion-fab vertical="bottom" horizontal="end">
-    <ion-fab-button color="dark">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="toTindakLanjut(pengaduan.id)" data-desc="Tuliskan Tindak Lanjut" color="primary">
-        <ion-icon name="briefcase"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab> -->
-
 <ion-footer color="none">
-  <ion-button expand="block" color="danger" size="medium" (click)="toTindakLanjut(pengaduan.id)">
+  <ion-button expand="block" color="danger" size="medium" (click)="toTindakLanjut(pengaduan.id)" class="ion-margin">
     Tambahkan Tindak Lanjut
   </ion-button>
 </ion-footer>

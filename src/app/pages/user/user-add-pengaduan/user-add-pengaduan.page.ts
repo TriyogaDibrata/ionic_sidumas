@@ -109,6 +109,24 @@ export class UserAddPengaduanPage implements OnInit {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
     }
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+    this.map.addListener('click', (event) => {
+
+      this.lat = event.latLng.lat();
+      this.lng = event.latLng.lng();
+
+      let marker = new google.maps.Marker({
+        position: event.latLng,
+        map: this.map,
+        title: 'I am here!',
+        draggable: true
+      });
+
+      this.markers.push(marker);
+      this.map.setCenter(event.latLng);
+      this.getMarkerPosition(event.latLng);
+      this.addMarker(event.latLng);
+    });
   }
 
   tryGeolocation() {
@@ -188,6 +206,7 @@ export class UserAddPengaduanPage implements OnInit {
       position: latLng
     })
     this.markers.push(marker);
+
     google.maps.event.addListener(marker, 'dragend', () => {
       this.getMarkerPosition(marker.getPosition());
       this.lat = marker.getPosition().lat();
@@ -205,7 +224,7 @@ export class UserAddPengaduanPage implements OnInit {
 
   clearMarkers() {
     for (var i = 0; i < this.markers.length; i++) {
-      console.log(this.markers[i]);
+      // console.log(this.markers[i]);
       this.markers[i].setMap(null);
     }
     this.markers = [];

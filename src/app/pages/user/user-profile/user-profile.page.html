@@ -27,48 +27,69 @@
         <ion-col size="12" padding>
 
           <ion-list margin-bottom>
-            <ion-list-header color="light">
-              <ion-label class="fw700">Data Diri</ion-label>
+            <ion-list-header color="danger">
+              <ion-label class="fw700">Informasi Publik</ion-label>
             </ion-list-header>
 
-            <ion-item no-padding>
+            <ion-item>
               <ion-label color="dark" position="stacked">Nama</ion-label>
               <ion-input type="text" value="{{user.name}}"></ion-input>
             </ion-item>
 
-            <ion-item no-padding>
+            <ion-item>
               <ion-label color="dark" position="stacked">Email</ion-label>
               <ion-input type="email" value="{{user.email}}"></ion-input>
             </ion-item>
 
-            <ion-item no-padding>
+            <ion-item>
+              <ion-label color="dark" position="stacked">Bio</ion-label>
+              <ion-textarea type="text" clearInput="true" value="{{user.no_hp}}"></ion-textarea>
+            </ion-item>
+
+            <ion-list no-padding>
+              <ion-radio-group>
+                <ion-list-header>
+                  <ion-label>Jenis Kelamin</ion-label>
+                </ion-list-header>
+
+                <ion-item>
+                  <ion-label>Laki-Laki</ion-label>
+                  <ion-radio slot="start" value="1"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Perempuan</ion-label>
+                  <ion-radio slot="start" value="0"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-list>
+
+          <ion-list margin-bottom>
+            <ion-list-header color="danger">
+              <ion-label class="fw700">Data Pribadi</ion-label>
+            </ion-list-header>
+
+            <ion-item>
               <ion-label color="dark" position="stacked">Phone</ion-label>
               <ion-input type="tel" clearInput="true" value="{{user.no_hp}}"></ion-input>
             </ion-item>
-          </ion-list>
 
-          <ion-list>
-            <ion-radio-group>
-              <ion-list-header color="light">
-                <ion-label class="fw700">Jenis Kelamin</ion-label>
-              </ion-list-header>
+            <ion-item>
+              <ion-label color="dark" position="stacked">Tanggal Lahir</ion-label>
+              <ion-datetime display-format="DD MMMM YYYY"></ion-datetime>
+            </ion-item>
 
-              <ion-item>
-                <ion-label color="primary">Laki-laki</ion-label>
-                <ion-radio slot="start" value="laki-laki" checked></ion-radio>
-              </ion-item>
-
-              <ion-item>
-                <ion-label color="primary">Perempuan</ion-label>
-                <ion-radio slot="start" value="perempuan"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
+            <ion-item>
+              <ion-label color="dark" position="stacked">NIK</ion-label>
+              <ion-input type="number" value="{{user.email}}"></ion-input>
+            </ion-item>
           </ion-list>
 
         </ion-col>
       </ion-row>
     </ion-grid>
 
-    <ion-button size="large" expand="block" color="dark" (click)="sendData()" no-margin>Edit</ion-button>
+    <ion-button shape="round" expand="block" color="primary" (click)="sendData()" style="margin: 0 40px 20px 40px;">Edit</ion-button>
   </ion-card>
 </ion-content>
