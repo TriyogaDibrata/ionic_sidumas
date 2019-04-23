@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { NotificationsComponent } from '../../../components/notifications/notifications.component'
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -18,6 +18,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 })
 export class UserPengaduanSayaPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   searchKey = '';
   yourLocation = '123 Test Street';
@@ -100,6 +101,7 @@ export class UserPengaduanSayaPage implements OnInit {
   loadMore(infiniteScroll) {
     this.limit = this.pengaduan.length + 5;
     this.getPengaduan(infiniteScroll);
+    this.infiniteScroll.disabled;
 
     if (this.limit === this.pengaduan.length) {
       infiniteScroll.enable(false);
