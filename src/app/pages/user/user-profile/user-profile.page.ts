@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController, ToastController, MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/providers/auth/auth.service';
 import { Storage } from '@ionic/storage';
+import { EnvService } from '../../../providers/env/env.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ResourceLoader } from '@angular/compiler';
+import { AlertService } from '../../../providers/alert/alert.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,7 +14,7 @@ import { Storage } from '@ionic/storage';
 })
 export class UserProfilePage implements OnInit {
 
-  user: any;
+  user: any = {};
 
   constructor(
     public navCtrl: NavController,
@@ -18,18 +22,21 @@ export class UserProfilePage implements OnInit {
     public toastCtrl: ToastController,
     private menuCtrl: MenuController,
     private authService: AuthService,
-    private storage: Storage
+    private storage: Storage,
+    private env: EnvService,
+    private http: HttpClient,
+    private alert: AlertService
   ) { }
 
   ngOnInit() {
-    this.storage.get('user')
-    .then(user => {
-      this.user = user.user;
-    })
   }
 
   ionViewWillEnter() {
-    
+    this.storage.get('user')
+    .then(user => {
+      console.log(user.user);
+      this.user = user.user;
+    })
   }
 
   async sendData() {
@@ -48,8 +55,28 @@ export class UserProfilePage implements OnInit {
       });
 
       toast.present();
-      this.navCtrl.navigateForward('/home-results');
+
     });
+  }
+
+  updateUser(){
+    let headers = new HttpHeaders({
+      'Authorization': 'Bearer '+ this.user.api_token,
+      'Accept': 'application/json',
+    })
+
+    this.http.post(this.env.API_URL+ 'pengaduan/update-user', this.user, {headers: headers})
+    .subscribe(user => {
+      if(user['success']){
+        this.storage.set('user', user)
+        .then(()=> {
+          this.alert.presentToast('Data Berhasil Disimpan');
+          this.ionViewWillEnter();
+        });
+      }
+    }, err => {
+      console.log(err);
+    })
   }
 
 }

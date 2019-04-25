@@ -16,7 +16,7 @@
     <ion-buttons slot="end">
       <ion-button size="small" shape="round" color="warning" (click)="notifications()">
         <ion-icon name="notifications"></ion-icon>
-        <ion-badge color="primary" slot="end">{{notif.length}}</ion-badge>
+        <ion-badge color="primary" slot="end" *ngIf="notif">{{notif.length}}</ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -51,7 +51,7 @@
             </ion-col>
           </ion-row>
         </ion-card-subtitle>
-        <ion-card-title>{{item.topik}}</ion-card-title>
+        <ion-card-title (click)="goToDetail(item.id)">{{item.topik}}</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
@@ -69,7 +69,9 @@
         <div class="uraian">
           <ion-row>
             <ion-col>
-              <p>{{ (item.uraian).substring(0, 200) }} ... <a (click)="goToDetail(item.id)">detail</a></p>
+              <!-- <p>{{ (item.uraian).substring(0, 200) }} ... <a (click)="goToDetail(item.id)">detail</a></p> -->
+              <p>{{ item.uraian | words : 20 }}</p>
+              <a (click)="goToDetail(item.id)">Selengkapnya</a>
             </ion-col>
             <ion-col size="4" *ngIf="item.file">
               <img [src]="item.file.fullpath">

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
+import { TruncateModule } from '@yellowspot/ng-truncate';
 // import { PopmenuComponent } from '../../../components/popmenu/popmenu.component';
 
 import { UserHomePage } from './user-home.page';
@@ -20,6 +21,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    TruncateModule,
     RouterModule.forChild(routes)
   ],
   declarations: [UserHomePage]

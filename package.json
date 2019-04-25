@@ -36,6 +36,7 @@
     "@ionic-native/twitter-connect": "^5.3.0",
     "@ionic/angular": "^4.1.0",
     "@ionic/storage": "^2.2.0",
+    "@yellowspot/ng-truncate": "^1.5.0",
     "call-number": "1.0.1",
     "cordova-android": "7.1.4",
     "cordova-plugin-camera": "4.0.3",
@@ -58,7 +59,8 @@
     "moment": "^2.24.0",
     "rxjs": "~6.3.3",
     "twitter-connect-plugin": "0.6.0",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "mx.ferreyra.callnumber": "~0.0.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.12.3",

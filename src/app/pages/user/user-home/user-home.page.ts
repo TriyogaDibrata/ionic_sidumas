@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
+import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController, IonInfiniteScroll, Platform } from '@ionic/angular';
 import { NotificationsComponent } from '../../../components/notifications/notifications.component'
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -49,7 +49,8 @@ export class UserHomePage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alert: AlertService,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private platform: Platform,
   ) { 
   }
 
@@ -59,7 +60,10 @@ export class UserHomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.getPengaduan();
+    this.platform.ready()
+    .then(()=> {
+      this.getPengaduan();
+    })
   }
 
   public showSearch() {

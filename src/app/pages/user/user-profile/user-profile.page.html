@@ -33,21 +33,21 @@
 
             <ion-item>
               <ion-label color="dark" position="stacked">Email</ion-label>
-              <ion-input type="email" value="{{user.email}}" readonly></ion-input>
+              <ion-input type="email" [(ngModel)]="user.email" readonly></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label color="dark" position="stacked">Nama</ion-label>
-              <ion-input type="text" value="{{user.name}}"></ion-input>
+              <ion-input type="text" [(ngModel)]="user.name"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label color="dark" position="stacked">Bio</ion-label>
-              <ion-textarea type="text" clearInput="true" value="{{user.no_hp}}"></ion-textarea>
+              <ion-textarea type="text" clearInput="true" [(ngModel)]="user.description"></ion-textarea>
             </ion-item>
 
             <ion-list no-padding>
-              <ion-radio-group>
+              <ion-radio-group [(ngModel)]="user.sex">
                 <ion-list-header>
                   <ion-label>Jenis Kelamin</ion-label>
                 </ion-list-header>
@@ -72,17 +72,17 @@
 
             <ion-item>
               <ion-label color="dark" position="stacked">Phone</ion-label>
-              <ion-input type="tel" clearInput="true" value="{{user.no_hp}}"></ion-input>
+              <ion-input type="tel" clearInput="true" [(ngModel)]="user.no_hp"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label color="dark" position="stacked">Tanggal Lahir</ion-label>
-              <ion-datetime display-format="DD MMMM YYYY"></ion-datetime>
+              <ion-datetime display-format="DD MMMM YYYY" [(ngModel)]="user.tgl_lahir"></ion-datetime>
             </ion-item>
 
             <ion-item>
               <ion-label color="dark" position="stacked">NIK</ion-label>
-              <ion-input type="number" value="{{user.email}}"></ion-input>
+              <ion-input type="number" value="{{user.email}}" [(ngModel)]="user.nik"></ion-input>
             </ion-item>
           </ion-list>
 
@@ -90,6 +90,6 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button shape="round" expand="block" color="primary" (click)="sendData()" style="margin: 0 40px 20px 40px;">Edit</ion-button>
+    <ion-button shape="round" expand="block" color="primary" (click)="updateUser()" style="margin: 0 40px 20px 40px;">Edit</ion-button>
   </ion-card>
 </ion-content>

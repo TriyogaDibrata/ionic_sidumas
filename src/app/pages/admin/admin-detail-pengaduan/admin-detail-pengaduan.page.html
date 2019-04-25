@@ -8,58 +8,60 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>
-        <ion-text>
-          {{pengaduan.kategori_name }} - {{pengaduan.subkategori_name}}
-        </ion-text>
-        <ion-text class="ion-float-right">
-          {{ pengaduan.status_pengaduan }}
-          <ion-icon name="checkmark-circle" *ngIf="pengaduan.status <= 1"></ion-icon>
-          <ion-icon name="checkmark-circle" *ngIf="pengaduan.status > 1" color="primary"></ion-icon>
-        </ion-text>
-      </ion-card-subtitle>
-    </ion-card-header>
+  <div *ngIf="pengaduan">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-text>
+            {{pengaduan.kategori_name }} - {{pengaduan.subkategori_name}}
+          </ion-text>
+          <ion-text class="ion-float-right">
+            {{ pengaduan.status_pengaduan }}
+            <ion-icon name="checkmark-circle" *ngIf="pengaduan.status <= 1"></ion-icon>
+            <ion-icon name="checkmark-circle" *ngIf="pengaduan.status > 1" color="primary"></ion-icon>
+          </ion-text>
+        </ion-card-subtitle>
+      </ion-card-header>
 
-    <ion-card-content>
-      <div class="user_thumbnail">
-        <ion-avatar item-left>
-          <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
-          <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
-        </ion-avatar>
-        <div class="user_name">
-          <h2>{{pengaduan.pelapor}}</h2>
-          <!-- <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label> -->
-          <ion-icon name="calendar"></ion-icon>
-          <ion-label style="margin-left: 5px;">{{ pengaduan.tanggal }}</ion-label>
+      <ion-card-content>
+        <div class="user_thumbnail">
+          <ion-avatar item-left>
+            <img *ngIf="pengaduan.avatar != null" [src]="pengaduan.avatar">
+            <img *ngIf="pengaduan.avatar == null" src="assets/img/user.png">
+          </ion-avatar>
+          <div class="user_name">
+            <h2>{{pengaduan.pelapor}}</h2>
+            <!-- <ion-label>{{ converTime(pengaduan.tanggal) }}</ion-label> -->
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label style="margin-left: 5px;">{{ pengaduan.tanggal }}</ion-label>
+          </div>
         </div>
-      </div>
-      <ion-card-title class="ion-text-center ion-padding">{{ pengaduan.topik }}</ion-card-title>
-      <ion-text class="ion-text-justify">{{ pengaduan.uraian }}</ion-text>
-      <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
-        <ion-slide *ngFor="let file of files">
-          <img [src]="file.fullpath">
-        </ion-slide>
-      </ion-slides>
-      <ion-card-subtitle>
-        <div class="ion-text-start">
-          Sumber :
-          <ion-icon name="browsers" *ngIf="pengaduan.sumber_id == 1"></ion-icon>
-          <ion-icon name="phone-portrait" *ngIf="pengaduan.sumber_id == 2"></ion-icon>
-          <ion-icon name="planet" *ngIf="pengaduan.sumber_id == 3"></ion-icon>
-          {{ pengaduan.sumber }}
-        </div>
-      </ion-card-subtitle>
-      <ion-card-subtitle>
-        <div class="ion-text-start">
-          Lokasi Pengaduan :
-          <ion-icon name="pin" color="danger"></ion-icon>
-          {{ pengaduan.alamat }}
-        </div>
-      </ion-card-subtitle>
-    </ion-card-content>
-  </ion-card>
+        <ion-card-title class="ion-text-center ion-padding">{{ pengaduan.topik }}</ion-card-title>
+        <ion-text class="ion-text-justify">{{ pengaduan.uraian }}</ion-text>
+        <ion-slides pager="true" [options]="slideOpts" *ngIf="files" margin-top="20px">
+          <ion-slide *ngFor="let file of files">
+            <img [src]="file.fullpath">
+          </ion-slide>
+        </ion-slides>
+        <ion-card-subtitle>
+          <div class="ion-text-start">
+            Sumber :
+            <ion-icon name="browsers" *ngIf="pengaduan.sumber_id == 1"></ion-icon>
+            <ion-icon name="phone-portrait" *ngIf="pengaduan.sumber_id == 2"></ion-icon>
+            <ion-icon name="planet" *ngIf="pengaduan.sumber_id == 3"></ion-icon>
+            {{ pengaduan.sumber }}
+          </div>
+        </ion-card-subtitle>
+        <ion-card-subtitle>
+          <div class="ion-text-start">
+            Lokasi Pengaduan :
+            <ion-icon name="pin" color="danger"></ion-icon>
+            {{ pengaduan.alamat }}
+          </div>
+        </ion-card-subtitle>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
   <!--map-->
   <div #map id="map" style="height: 30%; margin: 10px;">Cannot Load Map</div>
@@ -67,17 +69,17 @@
   <!--bar-->
   <ion-card>
     <ion-row padding>
-      <ion-col size="6" (click)="showTl()">
+      <ion-col size="6" *ngIf="tanggapans" (click)="showTl()">
         <ion-icon name="swap"></ion-icon>
         {{ tanggapans.length }}
         Tindak Lanjut
       </ion-col>
-      <ion-col (click)="showComments()">
+      <ion-col  *ngIf="comments" (click)="showComments()">
         <ion-icon name="chatboxes"></ion-icon>
         {{ comments.length }}
         <!-- Komentar -->
       </ion-col>
-      <ion-col (click)="addVote()">
+      <ion-col (click)="addVote()" *ngIf="pengaduan">
         <ion-icon name="thumbs-up"></ion-icon>
         {{ pengaduan.likes.length}}
         <!-- Dukungan -->

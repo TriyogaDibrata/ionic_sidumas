@@ -1,29 +1,37 @@
 <ion-list no-padding>
   <ion-list-header color="danger">
-    <ion-label>Notifikasi</ion-label>
+    <ion-label class="ion-text-center text-bold">Notifikasi</ion-label>
   </ion-list-header>
 
   <ion-card *ngFor="let notif of notifications" (click)="goToDetail(notif.pengaduan_id)">
-    <ion-chip>
-      <ion-avatar *ngIf="notif.avatar">
-        <img [src]="notif.avatar">
-      </ion-avatar>
-      <ion-avatar *ngIf="!notif.avatar">
-        <img src="assets/img/user.png">
-      </ion-avatar>
-      <ion-label>{{notif.username}}</ion-label>
-    </ion-chip>
-    <div class="notif-content">
-      <ion-text>{{notif.notif_title}}</ion-text>
-      <br />
-      <ion-text class="notif-date">{{ converTime(notif.created_at) }}</ion-text>
-    </div>
-  </ion-card>
-
-  <ion-card *ngIf="notifications.length < 1">
     <ion-card-content>
-      <ion-text class="ion-text-center">Tidak Ada Notifikasi Terbaru</ion-text>
+      <ion-chip color="dark">
+        <ion-avatar *ngIf="notif.avatar">
+          <img [src]="notif.avatar">
+        </ion-avatar>
+        <ion-avatar *ngIf="!notif.avatar">
+          <img src="assets/img/user.png">
+        </ion-avatar>
+        <ion-label>{{notif.username}}</ion-label>
+      </ion-chip>
+      <div class="notif-content">
+        <ion-text class="ion-text-capitalize">{{notif.notif_title}}</ion-text>
+        <br />
+        <ion-text class="notif-date">{{ converTime(notif.created_at) }}</ion-text>
+      </div>
     </ion-card-content>
   </ion-card>
+
+  <div *ngIf="notifications">
+      <ion-card-content *ngIf="notifications.length < 1">
+        <ion-text class="ion-text-center">Tidak Ada Notifikasi Terbaru</ion-text>
+      </ion-card-content>
+  </div>
+
+  <div>
+      <ion-card-content class="ion-text-center">
+        <a color="primary" class="text-bold">Lihat Semua Notifikasi</a>
+      </ion-card-content>
+  </div>
 
 </ion-list>

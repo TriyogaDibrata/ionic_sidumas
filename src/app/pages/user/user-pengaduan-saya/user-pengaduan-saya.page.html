@@ -5,6 +5,7 @@
     </ion-buttons>
     <ion-title color="light">Pengaduan Saya</ion-title>
   </ion-toolbar>
+  <div *ngIf="user">
   <ion-toolbar no-padding>
     <ion-item color="danger">
       <ion-avatar slot="start" *ngIf="!user.avatar">
@@ -35,6 +36,7 @@
       </ion-chip>
     </ion-item>
   </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>

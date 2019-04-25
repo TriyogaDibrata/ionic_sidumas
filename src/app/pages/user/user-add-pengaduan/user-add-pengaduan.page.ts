@@ -54,11 +54,11 @@ export class UserAddPengaduanPage implements OnInit {
 
     this.geocoder = new google.maps.Geocoder;
     let elem = document.createElement("div")
-    this.GooglePlaces = new google.maps.places.PlacesService(elem);
-    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocomplete = {
       input: ''
     };
+    this.GooglePlaces = new google.maps.places.PlacesService(elem);
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService(this.autocomplete, {componentRestrictions: {country: 'id'}});
     this.autocompleteItems = [];
     this.markers = [];
     this.loading = this.loadingCtrl.create();
@@ -123,7 +123,7 @@ export class UserAddPengaduanPage implements OnInit {
       });
 
       this.markers.push(marker);
-      this.map.setCenter(event.latLng);
+      // this.map.setCenter(event.latLng);
       this.getMarkerPosition(event.latLng);
       this.addMarker(event.latLng);
     });

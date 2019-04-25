@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, MenuController, ToastController, PopoverController, ModalController, LoadingController } from '@ionic/angular';
 import { NotificationsComponent } from '../../../components/notifications/notifications.component'
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -45,7 +45,8 @@ export class AdminHomePage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alert: AlertService,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private loading: LoadingController,
   ) { }
 
   ngOnInit() {
@@ -73,7 +74,17 @@ export class AdminHomePage implements OnInit {
     }, 500);
   }
 
-  getPengaduan(infiniteScroll?) {
+  async getPengaduan(infiniteScroll?) {
+
+    const loading = await this.loading.create({
+      spinner: "bubbles",
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+
+    loading.present();
+
     this.storage.get('user')
       .then(user => {
         this.user = user.user;
@@ -86,9 +97,13 @@ export class AdminHomePage implements OnInit {
           .subscribe(data => {
             console.log(data['data']);
             this.pengaduan = data['data'];
+            loading.dismiss();
             if (infiniteScroll) {
               infiniteScroll.target.complete();
             }
+          }, err => {
+            console.log(err);
+            loading.dismiss();
           })
       })
   }
@@ -179,6 +194,10 @@ export class AdminHomePage implements OnInit {
     }).catch(() => {
       console.error("shareSheetShare: failed");
     });
+  }
+
+  async refreshPage(){
+    this.getPengaduan();
   }
 
 }

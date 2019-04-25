@@ -280,3 +280,19 @@
       </ion-list>
     </div>
   </ion-content>
+
+  <ion-content *ngIf="pengaduan && pengaduan.length <  1">
+    <div class="ion-text-center" (click)="refreshPage()">
+      <ion-row>
+        <ion-col size="12">
+          Tidak Ada Pengaduan Baru
+        </ion-col>
+        <ion-col size="12">
+            <ion-icon name="refresh-circle" size="large"></ion-icon>
+          </ion-col>
+        <ion-col size="12">
+          Tap To Refresh
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-content>

@@ -101,10 +101,10 @@ export class UserPengaduanSayaPage implements OnInit {
   loadMore(infiniteScroll) {
     this.limit = this.pengaduan.length + 5;
     this.getPengaduan(infiniteScroll);
-    this.infiniteScroll.disabled;
 
     if (this.limit === this.pengaduan.length) {
       infiniteScroll.enable(false);
+      this.infiniteScroll.disabled;
     }
   }
 
